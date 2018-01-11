@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import 'leaflet.gridlayer.googlemutant';
 import('leaflet/dist/leaflet.css');
 
 function basemapLayers(mapStyle, imgType) {
@@ -24,11 +25,18 @@ function osmap() {
   });
 }
 
+function googleMaps() {
+  return L.gridLayer.googleMutant({
+    type: 'satellite',
+  });
+}
+
 const mapLayers = {
   'basemap.at Color': basemapLayers('geolandbasemap', 'png'),
   'basemap.at Grau': basemapLayers('bmapgrau', 'png'),
   'basemap.at Orthophoto': basemapLayers('bmaporthofoto30cm', 'jpeg'),
   OpenStreetMap: osmap(),
+  GoogleMaps: googleMaps(),
 };
 
 export default function initMap() {
