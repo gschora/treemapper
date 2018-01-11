@@ -13,6 +13,7 @@ function basemapLayers(mapStyle, imgType) {
     type: 'map',
     subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
     attribution: basemapAttrib,
+    maxZoom: 19,
   });
 }
 
@@ -24,8 +25,8 @@ function osmap() {
   return L.tileLayer(osm, {
     type: 'map',
     attribution: osmAttr,
-    zIndex: 1,
-    maxZoom: 18,
+    // zIndex: 1,
+    // maxZoom: 19,
   });
 }
 
@@ -59,6 +60,19 @@ function setupMapCtrl() {
       polygon: {
         allowIntersection: false,
         showArea: true,
+        shapeOptions: {
+          weight: 2,
+          opacity: 0.8,
+          fillOpacity: 0.5,
+        },
+      },
+      polyline: {
+        allowIntersection: false,
+        showArea: true,
+        shapeOptions: {
+          weight: 2,
+          opacity: 0.9,
+        },
       },
     },
     edit: {
