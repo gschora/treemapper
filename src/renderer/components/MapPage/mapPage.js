@@ -1,32 +1,14 @@
-// import OLCollection from 'ol/collection';
-// import OLSVector from 'ol/source/vector';
-// import OLLVector from 'ol/layer/vector';
-// import OLFill from 'ol/style/fill';
-// import OLStyle from 'ol/style/style';
-// import OLStroke from 'ol/style/stroke';
-// import OLCircle from 'ol/style/circle';
-import OLTile from 'ol/layer/tile';
-import OLOSM from 'ol/source/osm';
-// import OLTileImage from 'ol/source/tileimage';
-import OLMap from 'ol/map';
-import OLView from 'ol/view';
-// import OLControl from 'ol/control';
-
-// const wgs84Sphere = new ol.Sphere(6378137); brauche ich für berechnungen
+import L from 'leaflet';
+import('leaflet/dist/leaflet.css');
 
 export default function initMap() {
-  const myMap = new OLMap({
-    layers: [
-      new OLTile({
-        source: new OLOSM(),
-      }),
-    ],
-    target: 'mapdiv',
-    view: new OLView({
-      center: [0, 0],
-      zoom: 2,
-    }),
-  });
+  const mymap = L.map('mapdiv').setView([51.505, -0.09], 13);
+  mymap.setZoom(2);
 
-  myMap.render();
+  L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+    maxZoom: 18,
+    minZoom: 2,
+  }).addTo(mymap);
 }

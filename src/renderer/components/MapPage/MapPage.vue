@@ -6,7 +6,6 @@
 
 <script>
   import mp from './mapPage.js';
-  import('ol/ol.css');
 
   export default {
     name: 'MapPage',
