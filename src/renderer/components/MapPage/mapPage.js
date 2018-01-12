@@ -25,7 +25,7 @@ function osmap() {
   return L.tileLayer(osm, {
     type: 'map',
     attribution: osmAttr,
-    // zIndex: 1,
+    zIndex: 1,
     // maxZoom: 19,
   });
 }
