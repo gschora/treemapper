@@ -80,6 +80,7 @@ const mapLayers = {
 function setupMapCtrl() {
   setDEText();
   const layerCtrl = L.control.layers(mapLayers);
+
   mymap.addControl(layerCtrl);
 
   const drawnItems = new L.FeatureGroup();
@@ -124,13 +125,18 @@ function setupMapCtrl() {
   });
 }
 
-export default function initMap() {
-  mymap = L.map('mapdiv', {
-    crs: L.CRS.EPSG3857,
-  });
-  mymap.setView([47.34, 15.83], 16);
+export default {
+  initMap() {
+    mymap = L.map('mapdiv', {
+      crs: L.CRS.EPSG3857,
+    });
+    mymap.setView([47.34, 15.83], 16);
 
-  mymap.addLayer(mapLayers['basemap.at Color']);
+    mymap.addLayer(mapLayers['basemap.at Color']);
 
-  setupMapCtrl();
-}
+    setupMapCtrl();
+    window.map = mymap;
+
+    mymap.invalidateSize(); // this is a hack, because map is not loading completely without this...
+  },
+};
