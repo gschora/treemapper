@@ -18,7 +18,7 @@
     // mounted ist WICHTIG!!!!!! Sonst wird map zu früh gerendert und nicht angezeigt!!!!!!
     mounted() {
       this.$nextTick(() => {
-        mp();
+        mp.initMap();
       });
     },
   };
