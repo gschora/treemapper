@@ -5,6 +5,7 @@ import('leaflet/dist/leaflet.css');
 import('leaflet-draw/dist/leaflet.draw.css');
 
 let mymap = '';
+let drawnItems = '';
 
 function basemapLayers(mapStyle, imgType) {
   const basemapUrl = `http://{s}.wien.gv.at/basemap/${mapStyle}/normal/google3857/{z}/{y}/{x}.${imgType}`;
@@ -79,12 +80,11 @@ const mapLayers = {
 
 function setupMapCtrl() {
   setDEText();
-  const layerCtrl = L.control.layers(mapLayers);
 
-  mymap.addControl(layerCtrl);
-
-  const drawnItems = new L.FeatureGroup();
+  drawnItems = new L.FeatureGroup();
   mymap.addLayer(drawnItems);
+  const layerCtrl = L.control.layers(mapLayers);
+  mymap.addControl(layerCtrl);
 
   const drawCtrl = new L.Control.Draw({
     draw: {
@@ -121,6 +121,10 @@ function setupMapCtrl() {
 
   mymap.on(L.Draw.Event.CREATED, (event) => {
     const layer = event.layer;
+    layer.on('click', () => {
+      // console.log(drawnItems.getLayerId(layer));
+      console.log(L.GeometryUtil.geodesicArea(layer.getLatLngs()));
+    });
     drawnItems.addLayer(layer);
   });
 }
@@ -132,11 +136,12 @@ export default {
     });
     mymap.setView([47.34, 15.83], 16);
 
-    mymap.addLayer(mapLayers['basemap.at Color']);
+    mymap.addLayer(mapLayers.OpenStreetMap);
 
     setupMapCtrl();
     window.map = mymap;
+    window.map.drawnItems = drawnItems;
 
-    mymap.invalidateSize(); // this is a hack, because map is not loading completely without this...
+    mymap.invalidateSize(); // this is a hack, because map is not loading completely without this... https://github.com/Leaflet/Leaflet/issues/694
   },
 };
