@@ -48,6 +48,8 @@ const tilePixelRatio = 2;
 
 function setupLayers() {
   const olsm = new OLTile({
+    type: 'base',
+    title: 'Openstreetmap',
     source: new OLOSM({
       projection: 'EPSG:3857',
     }),
@@ -70,6 +72,8 @@ function setupLayers() {
       options.tilePixelRatio = tilePixelRatio;
       baselayers.getLayers().push(
         new OLTile({
+          type: 'base',
+          title: 'basemap Orthofoto',
           source: new OLSWmts(options),
         }),
       );
@@ -80,6 +84,8 @@ function setupLayers() {
       });
       baselayers.getLayers().push(
         new OLTile({
+          type: 'base',
+          title: 'basemap.at Hidpi',
           source: new OLSWmts(options),
         }),
       );
@@ -90,6 +96,8 @@ function setupLayers() {
       });
       baselayers.getLayers().push(
         new OLTile({
+          type: 'base',
+          title: 'basemap.at Grau',
           source: new OLSWmts(options),
         }),
       );
@@ -97,11 +105,14 @@ function setupLayers() {
 
   baselayers.getLayers().push(
     new OLTile({
+      type: 'base',
+      title: 'Bing',
       // visible: false,
       // preload: Infinity,
       source: new OLSBing({
         key: 'AmZbHjfWoosiM_wNCJPR_gkkobRA1ikmQAApFP-3vjaYoZmhLnXSEfl1TUOl3W2Z',
         imagerySet: ['Aerial'],
+        projection: 'EPSG:3857',
         // use maxZoom 19 to see stretched tiles instead of the BingMaps
         // "no photos at this zoom level" tiles
         // maxZoom: 19
@@ -111,7 +122,9 @@ function setupLayers() {
 }
 
 function setupCtrls() {
-  const layerSwitcher = new OLLayerSwitcher();
+  const layerSwitcher = new OLLayerSwitcher({
+    tipLabel: 'Karten',
+  });
   omap.addControl(layerSwitcher);
 }
 
