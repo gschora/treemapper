@@ -6,7 +6,7 @@ import OLStroke from 'ol/style/stroke';
 import OLCircle from 'ol/style/circle';
 import OLTile from 'ol/layer/tile';
 import OLOSM from 'ol/source/osm';
-// import OLTileImage from 'ol/source/tileimage';
+import OLTileImage from 'ol/source/tileimage';
 import OLMap from 'ol/map';
 import OLView from 'ol/view';
 import OLCollection from 'ol/collection';
@@ -37,6 +37,16 @@ function setupLayers() {
       projection: 'EPSG:3857',
     }),
   });
+
+  const googleLayer = new OLTile({
+    type: 'base',
+    visible: false,
+    title: 'Google',
+    source: new OLTileImage({
+      url: 'http://khm{0-3}.googleapis.com/kh?v=742&hl=pl&&x={x}&y={y}&z={z}',
+    }),
+  });
+  // googleLayer.type = 'base';
 
   const bingLayer = new OLTile({
     type: 'base',
@@ -116,6 +126,7 @@ function setupLayers() {
         source: new OLSWmts(optionsgrau),
       });
       baselayers.getLayers().push(vector);
+      baselayers.getLayers().push(googleLayer);
       baselayers.getLayers().push(bingLayer);
       baselayers.getLayers().push(bmapOrthoLayer);
       baselayers.getLayers().push(bmapGrau);
