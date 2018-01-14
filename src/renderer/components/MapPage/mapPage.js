@@ -1,9 +1,9 @@
-import OLSVector from 'ol/source/vector';
-import OLLVector from 'ol/layer/vector';
-import OLFill from 'ol/style/fill';
-import OLStyle from 'ol/style/style';
-import OLStroke from 'ol/style/stroke';
-import OLCircle from 'ol/style/circle';
+// import OLSVector from 'ol/source/vector';
+// import OLLVector from 'ol/layer/vector';
+// import OLFill from 'ol/style/fill';
+// import OLStyle from 'ol/style/style';
+// import OLStroke from 'ol/style/stroke';
+// import OLCircle from 'ol/style/circle';
 import OLTile from 'ol/layer/tile';
 import OLOSM from 'ol/source/osm';
 // import OLTileImage from 'ol/source/tileimage';
@@ -14,35 +14,37 @@ import OLWmsCap from 'ol/format/wmtscapabilities';
 import OLSWmts from 'ol/source/wmts';
 import OLGroup from 'ol/layer/group';
 import OLSBing from 'ol/source/bingmaps';
+import OLLayerSwitcher from 'ol3-layerswitcher';
+import 'ol3-layerswitcher/src/ol3-layerswitcher.css';
 
 let omap = '';
 const capabilitiesUrl = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml';
-const features = new OLCollection();
+// const features = new OLCollection();
 const baselayers = new OLGroup({
   title: 'BaseLayers',
   layers: new OLCollection(),
 });
-const source = new OLSVector({ feature: features });
+// const source = new OLSVector({ feature: features });
 // const layer = 'bmaphidpi'; // 'geolandbasemap';
 const tilePixelRatio = 2;
-const vector = new OLLVector({
-  source,
-  style: new OLStyle({
-    fill: new OLFill({
-      color: 'rgba(255, 255, 255, 0.2)',
-    }),
-    stroke: new OLStroke({
-      color: '#ffcc33',
-      width: 2,
-    }),
-    image: new OLCircle({
-      radius: 7,
-      fill: new OLFill({
-        color: '#ffcc33',
-      }),
-    }),
-  }),
-});
+// const vector = new OLLVector({
+//   source,
+//   style: new OLStyle({
+//     fill: new OLFill({
+//       color: 'rgba(255, 255, 255, 0.2)',
+//     }),
+//     stroke: new OLStroke({
+//       color: '#ffcc33',
+//       width: 2,
+//     }),
+//     image: new OLCircle({
+//       radius: 7,
+//       fill: new OLFill({
+//         color: '#ffcc33',
+//       }),
+//     }),
+//   }),
+// });
 
 function setupLayers() {
   const olsm = new OLTile({
@@ -108,6 +110,11 @@ function setupLayers() {
   );
 }
 
+function setupCtrls() {
+  const layerSwitcher = new OLLayerSwitcher();
+  omap.addControl(layerSwitcher);
+}
+
 export default {
   initMap: () => {
     setupLayers();
@@ -119,7 +126,8 @@ export default {
         zoom: 10,
       }),
     });
-    omap.addLayer(vector);
+    setupCtrls();
+    // omap.addLayer(vector);
 
     window.omap = omap;
   },
