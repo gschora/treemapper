@@ -36,7 +36,7 @@
     top: 0.5em;
   }
   .layer-switcher button{
-    background-image: url('./ic_collections_white_36dp_1x.png');
+    background-image: url('./icons/ic_collections_white_36dp_1x.png');
   }
   #mapdiv .ol-control button{
     font-size: 2em;

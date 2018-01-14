@@ -3,9 +3,8 @@ import OLView from 'ol/view';
 import OLCollection from 'ol/collection';
 import OLGroup from 'ol/layer/group';
 
-import OLLayerSwitcher from 'ol3-layerswitcher';
-import 'ol3-layerswitcher/src/ol3-layerswitcher.css';
-import mp from './mapLayers';
+import mpl from './mapLayers';
+import mpc from './mapControls';
 
 let omap = '';
 const baselayers = new OLGroup({
@@ -13,16 +12,9 @@ const baselayers = new OLGroup({
   layers: new OLCollection(),
 });
 
-function setupCtrls() {
-  const layerSwitcher = new OLLayerSwitcher({
-    tipLabel: 'Karten',
-  });
-  omap.addControl(layerSwitcher);
-}
-
 export default {
   initMap: () => {
-    mp.setupLayers(baselayers);
+    mpl.setupLayers(baselayers);
     omap = new OLMap({
       layers: baselayers,
       target: 'mapdiv',
@@ -31,7 +23,7 @@ export default {
         zoom: 10,
       }),
     });
-    setupCtrls();
+    omap.addControl(mpc.setupCtrls());
     window.omap = omap;
   },
 };
