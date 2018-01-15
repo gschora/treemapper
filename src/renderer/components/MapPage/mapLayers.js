@@ -15,7 +15,12 @@ import OLTileImage from 'ol/source/tileimage';
 const capabilitiesUrl = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml';
 const features = new OLCollection();
 const source = new OLSVector({ feature: features });
-
+/**
+ * Sets up all Layers
+ * needs collection from map where layers should go
+ *
+ * @param {ol.collection} baselayers
+ */
 function setupLayers(baselayers) {
   const olsm = new OLTile({
     type: 'base',
@@ -70,6 +75,7 @@ function setupLayers(baselayers) {
       }),
     }),
   });
+  vector.set('title', 'Felder');
 
   let bmapOrthoLayer = '';
   let bmapHidpiLayer = '';
