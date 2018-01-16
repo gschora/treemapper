@@ -8,15 +8,20 @@ import mpc from './mapControls';
 
 let omap = null;
 const baselayers = new OLGroup({
-  title: 'BaseLayers',
+  title: 'Hauptkarten',
+  layers: new OLCollection(),
+});
+const overlaylayers = new OLGroup({
+  title: 'Overlays',
   layers: new OLCollection(),
 });
 
 export default {
   initMap: () => {
-    mpl.setupLayers(baselayers);
+    const veclayer = mpl.setupLayers(baselayers, overlaylayers);
+    veclayer.setZIndex(10);
     omap = new OLMap({
-      layers: baselayers,
+      layers: [overlaylayers, baselayers],
       target: 'mapdiv',
       controls: OLControl.defaults({
         attribution: false,
@@ -27,8 +32,9 @@ export default {
         projection: 'EPSG:3857',
       }),
     });
-    mpc.setupCtrls(omap);
+    mpc.setupCtrls(omap, veclayer);
     window.omap = omap;
+    window.veclayer = veclayer;
     omap.renderSync();
   },
 };

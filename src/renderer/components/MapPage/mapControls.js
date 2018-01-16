@@ -4,8 +4,22 @@ import OLSphere from 'ol/sphere';
 import OLISelect from 'ol/interaction/select';
 import OLIModify from 'ol/interaction/modify';
 import OLCControl from 'ol/control/control';
+import OLDraw from 'ol/interaction/draw';
+import OLFill from 'ol/style/fill';
+import OLStyle from 'ol/style/style';
+import OLStroke from 'ol/style/stroke';
+import OLCircle from 'ol/style/circle';
+import OLEventCondition from 'ol/events/condition';
+import OLProj from 'ol/proj';
+import OLOverlay from 'ol/overlay';
+import OLPolygon from 'ol/geom/polygon';
+import OLLineString from 'ol/geom/linestring';
+// import OLCollection from 'ol/collection';
+
 // import OLControl from 'ol/control';
 import ol from 'ol';
+
+// const c = console;
 
 let map;
 let sketch;
@@ -21,7 +35,6 @@ const wgs84Sphere = new OLSphere(6378137);
 let measureMode = 'none';
 let draw; // global so we can remove it later
 
-let vecLayer;
 let source;
 
 const select = new OLISelect({
@@ -35,19 +48,9 @@ const modify = new OLIModify({
   // that new vertices can be drawn at the same position
   // of existing vertices
   deleteCondition(event) {
-    return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
+    return OLEventCondition.shiftKeyOnly(event) && OLEventCondition.singleClick(event);
   },
 });
-
-function setVectorLayerFromMap(map) {
-  const col = map.getLayerGroup().getLayers();
-  col.forEach((lay) => {
-    if (lay.get('title') === 'Felder') {
-      vecLayer = lay;
-      source = vecLayer.getSource();
-    }
-  });
-}
 
 function formatLength(line) {
   let length;
@@ -55,8 +58,8 @@ function formatLength(line) {
   length = 0;
   const sourceProj = map.getView().getProjection();
   for (let i = 0, ii = coordinates.length - 1; i < ii; i += 1) {
-    const c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
-    const c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+    const c1 = OLProj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+    const c2 = OLProj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
     length += wgs84Sphere.haversineDistance(c1, c2);
   }
   let output;
@@ -93,7 +96,7 @@ function createMeasureTooltip() {
   }
   measureTooltipElement = document.createElement('div');
   measureTooltipElement.className = 'tooltip tooltip-measure';
-  measureTooltip = new ol.Overlay({
+  measureTooltip = new OLOverlay({
     element: measureTooltipElement,
     offset: [-50, -25],
     positioning: 'bottom-center',
@@ -107,7 +110,7 @@ function createHelpTooltip() {
   }
   helpTooltipElement = document.createElement('div');
   helpTooltipElement.className = 'tooltip hidden';
-  helpTooltip = new ol.Overlay({
+  helpTooltip = new OLOverlay({
     element: helpTooltipElement,
     offset: [15, 0],
     positioning: 'center-left',
@@ -116,24 +119,24 @@ function createHelpTooltip() {
 }
 
 function addInteraction() {
-  draw = new ol.interaction.Draw({
+  draw = new OLDraw({
     source,
-    type /** @type {ol.geom.GeometryType} */: measureMode,
-    style: new ol.style.Style({
-      fill: new ol.style.Fill({
+    type: measureMode,
+    style: new OLStyle({
+      fill: new OLFill({
         color: 'rgba(255, 255, 255, 0.2)',
       }),
-      stroke: new ol.style.Stroke({
+      stroke: new OLStroke({
         color: 'rgba(0, 0, 0, 0.5)',
         lineDash: [10, 10],
         width: 2,
       }),
-      image: new ol.style.Circle({
+      image: new OLCircle({
         radius: 5,
-        stroke: new ol.style.Stroke({
+        stroke: new OLStroke({
           color: 'rgba(0, 0, 0, 0.7)',
         }),
-        fill: new ol.style.Fill({
+        fill: new OLFill({
           color: 'rgba(255, 255, 255, 0.2)',
         }),
       }),
@@ -149,16 +152,15 @@ function addInteraction() {
       // set sketch
       sketch = evt.feature;
 
-      /** @type {ol.Coordinate|undefined} */
       let tooltipCoord = evt.coordinate;
 
       sketch.getGeometry().on('change', (evt) => {
         const geom = evt.target;
         let output;
-        if (geom instanceof ol.geom.Polygon) {
+        if (geom instanceof OLPolygon) {
           output = formatArea(geom);
           tooltipCoord = geom.getInteriorPoint().getCoordinates();
-        } else if (geom instanceof ol.geom.LineString) {
+        } else if (geom instanceof OLLineString) {
           output = formatLength(geom);
           tooltipCoord = geom.getLastCoordinate();
         }
@@ -236,7 +238,6 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
   button.id = 'measureAreaCtrlBtn';
   // button.appendChild(i);
 
-  //   var this_ = this;
   const setMeasureArea = () => {
     if (measureMode === 'Polygon') {
       measureMode = 'none';
@@ -285,9 +286,10 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
   });
 };
 
-function setupCtrls(olmap) {
+function setupCtrls(olmap, vectorLayer) {
   map = olmap;
-  setVectorLayerFromMap(olmap);
+  source = vectorLayer.getSource();
+
   const layerSwitcher = new OLLayerSwitcher({
     tipLabel: 'Karten',
   });

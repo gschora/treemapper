@@ -1,4 +1,3 @@
-import OLCollection from 'ol/collection';
 import OLWmsCap from 'ol/format/wmtscapabilities';
 import OLSWmts from 'ol/source/wmts';
 import OLSBing from 'ol/source/bingmaps';
@@ -11,17 +10,19 @@ import OLCircle from 'ol/style/circle';
 import OLTile from 'ol/layer/tile';
 import OLOSM from 'ol/source/osm';
 import OLTileImage from 'ol/source/tileimage';
+import OLCollection from 'ol/collection';
 
 const capabilitiesUrl = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml';
 const features = new OLCollection();
-const source = new OLSVector({ feature: features });
+const source = new OLSVector({ features });
+
 /**
  * Sets up all Layers
  * needs collection from map where layers should go
  *
  * @param {ol.collection} baselayers
  */
-function setupLayers(baselayers) {
+function setupLayers(baselayers, overlaylayers) {
   const olsm = new OLTile({
     type: 'base',
     visible: true,
@@ -75,59 +76,65 @@ function setupLayers(baselayers) {
       }),
     }),
   });
-  vector.set('title', 'Felder');
 
   let bmapOrthoLayer = '';
   let bmapHidpiLayer = '';
   let bmapGrau = '';
-
-  fetch(capabilitiesUrl)
-    .then(response => response.text())
-    .then((text) => {
-      const result = new OLWmsCap().read(text);
-      const options = OLSWmts.optionsFromCapabilities(result, {
-        layer: 'bmaporthofoto30cm', // layer,
-        matrixSet: 'google3857',
-        style: 'normal',
+  try {
+    fetch(capabilitiesUrl)
+      .then(response => response.text())
+      .then((text) => {
+        const result = new OLWmsCap().read(text);
+        const options = OLSWmts.optionsFromCapabilities(result, {
+          layer: 'bmaporthofoto30cm', // layer,
+          matrixSet: 'google3857',
+          style: 'normal',
+        });
+        options.tilePixelRatio = 2;
+        bmapOrthoLayer = new OLTile({
+          type: 'base',
+          visible: false,
+          title: 'basemap Orthofoto',
+          source: new OLSWmts(options),
+        });
+        const optionshigdpi = OLSWmts.optionsFromCapabilities(result, {
+          layer: 'bmaphidpi', // layer,
+          matrixSet: 'google3857',
+          style: 'normal',
+        });
+        bmapHidpiLayer = new OLTile({
+          type: 'base',
+          visible: false,
+          title: 'basemap.at Hidpi',
+          source: new OLSWmts(optionshigdpi),
+        });
+        const optionsgrau = OLSWmts.optionsFromCapabilities(result, {
+          layer: 'bmapgrau', // layer,
+          matrixSet: 'google3857',
+          style: 'normal',
+        });
+        bmapGrau = new OLTile({
+          type: 'base',
+          visible: false,
+          title: 'basemap.at Grau',
+          source: new OLSWmts(optionsgrau),
+        });
+        overlaylayers.getLayers().push(vector);
+        baselayers.getLayers().push(googleLayer);
+        baselayers.getLayers().push(bingLayer);
+        baselayers.getLayers().push(bmapOrthoLayer);
+        baselayers.getLayers().push(bmapGrau);
+        baselayers.getLayers().push(bmapHidpiLayer);
+        baselayers.getLayers().push(olsm);
       });
-      options.tilePixelRatio = 2;
-      bmapOrthoLayer = new OLTile({
-        type: 'base',
-        visible: false,
-        title: 'basemap Orthofoto',
-        source: new OLSWmts(options),
-      });
-      const optionshigdpi = OLSWmts.optionsFromCapabilities(result, {
-        layer: 'bmaphidpi', // layer,
-        matrixSet: 'google3857',
-        style: 'normal',
-      });
-      bmapHidpiLayer = new OLTile({
-        type: 'base',
-        visible: false,
-        title: 'basemap.at Hidpi',
-        source: new OLSWmts(optionshigdpi),
-      });
-      const optionsgrau = OLSWmts.optionsFromCapabilities(result, {
-        layer: 'bmapgrau', // layer,
-        matrixSet: 'google3857',
-        style: 'normal',
-      });
-      bmapGrau = new OLTile({
-        type: 'base',
-        visible: false,
-        title: 'basemap.at Grau',
-        source: new OLSWmts(optionsgrau),
-      });
-      baselayers.getLayers().push(vector);
-      baselayers.getLayers().push(googleLayer);
-      baselayers.getLayers().push(bingLayer);
-      baselayers.getLayers().push(bmapOrthoLayer);
-      baselayers.getLayers().push(bmapGrau);
-      baselayers.getLayers().push(bmapHidpiLayer);
-      baselayers.getLayers().push(olsm);
-      return baselayers;
-    });
+  } catch (error) {
+    // if fetch capabilities is not working add at least other layers
+    overlaylayers.getLayers().push(vector);
+    baselayers.getLayers().push(googleLayer);
+    baselayers.getLayers().push(bingLayer);
+    baselayers.getLayers().push(olsm);
+  }
+  return vector;
 }
 
 export default {
