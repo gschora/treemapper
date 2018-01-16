@@ -48,21 +48,22 @@
   .btn_measure_line {
     top: 100px;
     left: .5em;
-}
-
-.btn_measure_area {
+  }
+  .btn_measure_area {
     top: 10em;
     left: .5em;
-}
-
-.btn_feature_del{
+  }
+  #measureAreaCtrlBtn {
+    background-image: url('./icons/vector-polygon.png');
+  }
+  .btn_feature_del{
     top: 170px;
     left: .5em;
-}
-#btn_feature_del{
+  }
+  #btn_feature_del{
     background-color: rgba(255, 0, 0,.5);
-}
-#btn_feature_del:hover{
+  }
+  #btn_feature_del:hover{
     background-color: rgba(255, 0, 0,.8);
-}
+  }
 </style>

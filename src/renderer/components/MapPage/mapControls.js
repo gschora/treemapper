@@ -228,12 +228,13 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
 const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
   const options = optOptions || {};
 
-  const i = document.createElement('i');
-  i.setAttribute('aria-hidden', true);
-  i.setAttribute('class', 'material-icons icon');
-  i.innerHTML = 'signal_cellular_null';
+  // const i = document.createElement('i');
+  // // i.setAttribute('aria-hidden', true);
+  // i.setAttribute('class', 'measureAreaCtrl');
+  // i.innerHTML = ' ';
   const button = document.createElement('button');
-  button.appendChild(i);
+  button.id = 'measureAreaCtrlBtn';
+  // button.appendChild(i);
 
   //   var this_ = this;
   const setMeasureArea = () => {
