@@ -14,12 +14,12 @@ import OLProj from 'ol/proj';
 import OLOverlay from 'ol/overlay';
 import OLPolygon from 'ol/geom/polygon';
 import OLLineString from 'ol/geom/linestring';
+import OLIDblClkZoom from 'ol/interaction/doubleclickzoom';
 // import OLCollection from 'ol/collection';
 
 // import OLControl from 'ol/control';
 import ol from 'ol';
-
-// const c = console;
+import { setTimeout } from 'timers';
 
 let map;
 let sketch;
@@ -124,7 +124,7 @@ function addInteraction() {
     type: measureMode,
     style: new OLStyle({
       fill: new OLFill({
-        color: 'rgba(255, 255, 255, 0.2)',
+        color: 'rgba(0,60,136, 0.3)',
       }),
       stroke: new OLStroke({
         color: 'rgba(0, 0, 0, 0.5)',
@@ -137,7 +137,7 @@ function addInteraction() {
           color: 'rgba(0, 0, 0, 0.7)',
         }),
         fill: new OLFill({
-          color: 'rgba(255, 255, 255, 0.2)',
+          color: 'rgba(0,60,136, 0.2)',
         }),
       }),
     }),
@@ -151,7 +151,6 @@ function addInteraction() {
     (evt) => {
       // set sketch
       sketch = evt.feature;
-
       let tooltipCoord = evt.coordinate;
 
       sketch.getGeometry().on('change', (evt) => {
@@ -171,6 +170,14 @@ function addInteraction() {
     this,
   );
 
+  // helper function for end draw with doubleclick
+  function pauseDblClck(active) {
+    const dblClickInteraction = map
+      .getInteractions()
+      .getArray()
+      .find(interaction => interaction instanceof OLIDblClkZoom);
+    dblClickInteraction.setActive(active);
+  }
   draw.on(
     'drawend',
     // (evt) => {
@@ -181,6 +188,15 @@ function addInteraction() {
       measureTooltip.setOffset([0, -7]);
       // unset sketch
       sketch = null;
+
+      // hack to fix drawend bug with doubleclick
+      pauseDblClck(false);
+      map.removeInteraction(draw);
+      setTimeout(() => {
+        pauseDblClck(true);
+      }, 251);
+      // -----------------
+      measureMode = 'none';
       createMeasureTooltip();
     },
     this,
@@ -230,13 +246,8 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
 const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
   const options = optOptions || {};
 
-  // const i = document.createElement('i');
-  // // i.setAttribute('aria-hidden', true);
-  // i.setAttribute('class', 'measureAreaCtrl');
-  // i.innerHTML = ' ';
   const button = document.createElement('button');
   button.id = 'measureAreaCtrlBtn';
-  // button.appendChild(i);
 
   const setMeasureArea = () => {
     if (measureMode === 'Polygon') {

@@ -62,7 +62,7 @@ function setupLayers(baselayers, overlaylayers) {
     source,
     style: new OLStyle({
       fill: new OLFill({
-        color: 'rgba(255, 255, 255, 0.2)',
+        color: 'rgba(255, 255, 255, 0.4)',
       }),
       stroke: new OLStroke({
         color: '#ffcc33',
