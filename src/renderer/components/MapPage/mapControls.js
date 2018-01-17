@@ -372,6 +372,16 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
     target: options.target,
   });
 };
+let btnEditActive = false;
+function editFeatures() {
+  if (btnEditActive) {
+    document.getElementById('btn_feature_edit').classList.remove('active');
+    btnEditActive = false;
+  } else {
+    document.getElementById('btn_feature_edit').classList.add('active');
+    btnEditActive = true;
+  }
+}
 
 const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
   const options = optOptions || {};
@@ -383,6 +393,9 @@ const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
   const button = document.createElement('button');
   button.id = 'btn_feature_edit';
   button.appendChild(i);
+
+  button.addEventListener('click', editFeatures, false);
+  button.addEventListener('touchstart', editFeatures, false);
 
   const elBtnFeatureEdit = document.createElement('div');
   elBtnFeatureEdit.className = 'ol-control btn_feature_edit'; // ol-unselectable

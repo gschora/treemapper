@@ -71,6 +71,9 @@
   #mapdiv #btn_feature_del:hover{
     background-color: rgba(255, 0, 0,.8);
   }
+  #mapdiv .btn_feature_edit button.active{
+    background-color: rgba(0, 102, 0,.6);
+  }
   .tooltip {
     position: relative;
     background: rgba(255, 153, 0, 0.8);
