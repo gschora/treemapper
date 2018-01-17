@@ -53,11 +53,15 @@
     top: 10em;
     left: .5em;
   }
+  #mapdiv .btn_feature_edit {
+    top: 12.9em;
+    left: .5em;
+  }
   #measureAreaCtrlBtn {
     background-image: url('./icons/vector-polygon.png');
   }
   #mapdiv .btn_feature_del{
-    top: 13em;
+    top: 15.9em;
     left: .5em;
     /* background-color: rgba(255, 0, 0,.5); */
   }

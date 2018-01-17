@@ -373,6 +373,28 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
   });
 };
 
+const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
+  const options = optOptions || {};
+
+  const i = document.createElement('i');
+  i.setAttribute('aria-hidden', true);
+  i.setAttribute('class', 'material-icons icon');
+  i.innerHTML = 'edit';
+  const button = document.createElement('button');
+  button.id = 'btn_feature_edit';
+  button.appendChild(i);
+
+  const elBtnFeatureEdit = document.createElement('div');
+  elBtnFeatureEdit.className = 'ol-control btn_feature_edit'; // ol-unselectable
+  elBtnFeatureEdit.appendChild(button);
+  elBtnFeatureEdit.hidden = false;
+
+  OLCControl.call(this, {
+    element: elBtnFeatureEdit,
+    target: options.target,
+  });
+};
+
 function setupCtrls(olmap, vectorLayer) {
   map = olmap;
   vector = vectorLayer;
@@ -385,9 +407,11 @@ function setupCtrls(olmap, vectorLayer) {
 
   ol.inherits(MeasureLineControl, OLCControl);
   ol.inherits(MeasureAreaControl, OLCControl);
+  ol.inherits(FeatureEditControl, OLCControl);
   ol.inherits(FeatureDeleteControl, OLCControl);
   olmap.addControl(new MeasureLineControl());
   olmap.addControl(new MeasureAreaControl());
+  olmap.addControl(new FeatureEditControl());
   olmap.addControl(new FeatureDeleteControl());
 }
 
