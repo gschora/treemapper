@@ -27,29 +27,20 @@ let helpTooltipElement;
 let helpTooltip;
 let measureTooltipElement;
 let measureTooltip;
-// let measureInfoElement;
-// let measureInfo;
+let measureInfoElement;
+let measureInfo;
+let elBtnFeatureDel;
 // var continuePolygonMsg = 'Click to continue drawing the polygon';
 // var continueLineMsg = 'Click to continue drawing the line';
 const wgs84Sphere = new OLSphere(6378137);
 let measureMode = 'none';
 let draw; // global so we can remove it later
-
 let source;
+let vector;
 
 const select = new OLISelect({
   wrapX: false,
   hitTolerance: 5,
-});
-
-const modify = new OLIModify({
-  features: select.getFeatures(),
-  // the SHIFT key must be pressed to delete vertices, so
-  // that new vertices can be drawn at the same position
-  // of existing vertices
-  deleteCondition(event) {
-    return OLEventCondition.shiftKeyOnly(event) && OLEventCondition.singleClick(event);
-  },
 });
 
 function formatLength(line) {
@@ -89,6 +80,82 @@ function formatArea(polygon) {
   }
   return output;
 }
+
+function delFeature() {
+  if (select.getFeatures().getLength() > 0) {
+    const f = select.getFeatures().item(0);
+    vector.getSource().removeFeature(f);
+    select.getFeatures().clear();
+  }
+  measureInfoElement.hidden = true;
+  elBtnFeatureDel.hidden = true;
+
+  elBtnFeatureDel.removeEventListener('click', delFeature, false);
+  elBtnFeatureDel.removeEventListener('touchstart', delFeature, false);
+}
+
+select.on(
+  'select',
+  (evt) => {
+    if (evt.selected.length > 0) {
+      elBtnFeatureDel.hidden = false;
+      map.removeOverlay(measureInfo);
+      const feat = evt.target
+        .getFeatures()
+        .item(0)
+        .getGeometry();
+      let output;
+      let infoCoord;
+      // todo select
+      if (feat instanceof OLPolygon) {
+        output = formatArea(feat);
+        infoCoord = feat.getInteriorPoint().getCoordinates();
+        // vm_treesum.$data.treesum = Math.round(
+        //   measuredArea /
+        //     (vm_treesum.$data.rowdist / 100 * vm_treesum.$data.treedist / 100)
+        // );
+      } else if (feat instanceof OLLineString) {
+        output = formatLength(feat);
+        infoCoord = feat.getLastCoordinate();
+      }
+      measureInfoElement = document.createElement('div');
+      measureInfoElement.id = 'mInfoEl';
+      measureInfoElement.className = 'tooltip tooltip-static';
+      measureInfoElement.innerHTML = output;
+      measureInfo = new OLOverlay({
+        element: measureInfoElement,
+        offset: [0, -15],
+        positioning: 'bottom-center',
+      });
+      map.addOverlay(measureInfo);
+      measureInfo.setPosition(infoCoord);
+
+      elBtnFeatureDel.addEventListener('click', delFeature, false);
+      elBtnFeatureDel.addEventListener('touchstart', delFeature, false);
+    } else {
+      elBtnFeatureDel.hidden = true;
+    }
+  },
+  this,
+);
+
+const modify = new OLIModify({
+  features: select.getFeatures(),
+  // the SHIFT key must be pressed to delete vertices, so
+  // that new vertices can be drawn at the same position
+  // of existing vertices
+  deleteCondition(event) {
+    return OLEventCondition.shiftKeyOnly(event) && OLEventCondition.singleClick(event);
+  },
+});
+
+modify.on(
+  'modifystart',
+  () => {
+    map.removeOverlay(measureInfo);
+  },
+  this,
+);
 
 function createMeasureTooltip() {
   if (measureTooltipElement) {
@@ -197,6 +264,8 @@ function addInteraction() {
       }, 251);
       // -----------------
       measureMode = 'none';
+      document.getElementById('measureLineCtrlBtn').style.backgroundColor = '';
+      document.getElementById('measureAreaCtrlBtn').style.backgroundColor = '';
       createMeasureTooltip();
     },
     this,
@@ -214,6 +283,7 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
   i.setAttribute('class', 'material-icons icon');
   i.innerHTML = 'timeline';
   const button = document.createElement('button');
+  button.id = 'measureLineCtrlBtn';
   button.appendChild(i);
 
   //   var this_ = this;
@@ -223,8 +293,11 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
       map.removeInteraction(draw);
       map.addInteraction(select);
       map.addInteraction(modify);
+      button.style.backgroundColor = '';
     } else {
       measureMode = 'LineString';
+      button.style.backgroundColor = 'rgba(0, 102, 0,.6)';
+      document.getElementById('measureAreaCtrlBtn').style.backgroundColor = '';
       map.removeInteraction(draw);
       addInteraction();
     }
@@ -248,6 +321,7 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
 
   const button = document.createElement('button');
   button.id = 'measureAreaCtrlBtn';
+  const element = document.createElement('div');
 
   const setMeasureArea = () => {
     if (measureMode === 'Polygon') {
@@ -255,8 +329,11 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
       map.removeInteraction(draw);
       map.addInteraction(select);
       map.addInteraction(modify);
+      button.style.backgroundColor = '';
     } else {
       measureMode = 'Polygon';
+      button.style.backgroundColor = 'rgba(0, 102, 0,.6)';
+      document.getElementById('measureLineCtrlBtn').style.backgroundColor = '';
       map.removeInteraction(draw);
       addInteraction();
     }
@@ -265,8 +342,7 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
   button.addEventListener('click', setMeasureArea, false);
   button.addEventListener('touchstart', setMeasureArea, false);
 
-  const element = document.createElement('div');
-  element.className = 'btn_measure_area ol-unselectable ol-control';
+  element.className = 'btn_measure_area ol-control';
   element.appendChild(button);
 
   OLCControl.call(this, {
@@ -286,7 +362,7 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
   button.id = 'btn_feature_del';
   button.appendChild(i);
 
-  const elBtnFeatureDel = document.createElement('div');
+  elBtnFeatureDel = document.createElement('div');
   elBtnFeatureDel.className = 'ol-control btn_feature_del'; // ol-unselectable
   elBtnFeatureDel.appendChild(button);
   elBtnFeatureDel.hidden = true;
@@ -299,6 +375,7 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
 
 function setupCtrls(olmap, vectorLayer) {
   map = olmap;
+  vector = vectorLayer;
   source = vectorLayer.getSource();
 
   const layerSwitcher = new OLLayerSwitcher({

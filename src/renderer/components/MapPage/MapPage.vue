@@ -56,14 +56,15 @@
   #measureAreaCtrlBtn {
     background-image: url('./icons/vector-polygon.png');
   }
-  .btn_feature_del{
-    top: 170px;
+  #mapdiv .btn_feature_del{
+    top: 13em;
     left: .5em;
+    /* background-color: rgba(255, 0, 0,.5); */
   }
-  #btn_feature_del{
+  #mapdiv #btn_feature_del {
     background-color: rgba(255, 0, 0,.5);
   }
-  #btn_feature_del:hover{
+  #mapdiv #btn_feature_del:hover{
     background-color: rgba(255, 0, 0,.8);
   }
   .tooltip {
