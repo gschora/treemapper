@@ -94,6 +94,42 @@ function delFeature() {
   elBtnFeatureDel.removeEventListener('touchstart', delFeature, false);
 }
 
+function enableBtnFeatureEdit() {
+  if (source.getFeatures().length === 0) {
+    document.getElementById('btn_feature_edit').disabled = true;
+  } else {
+    document.getElementById('btn_feature_edit').disabled = false;
+  }
+}
+
+function createMeasureTooltip() {
+  if (measureTooltipElement) {
+    measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+  }
+  measureTooltipElement = document.createElement('div');
+  measureTooltipElement.className = 'tooltip tooltip-measure';
+  measureTooltip = new OLOverlay({
+    element: measureTooltipElement,
+    offset: [-50, -25],
+    positioning: 'bottom-center',
+  });
+  map.addOverlay(measureTooltip);
+}
+
+function createHelpTooltip() {
+  if (helpTooltipElement) {
+    helpTooltipElement.parentNode.removeChild(helpTooltipElement);
+  }
+  helpTooltipElement = document.createElement('div');
+  helpTooltipElement.className = 'tooltip hidden';
+  helpTooltip = new OLOverlay({
+    element: helpTooltipElement,
+    offset: [15, 0],
+    positioning: 'center-left',
+  });
+  map.addOverlay(helpTooltip);
+}
+
 select.on(
   'select',
   (evt) => {
@@ -134,6 +170,9 @@ select.on(
       elBtnFeatureDel.addEventListener('touchstart', delFeature, false);
     } else {
       elBtnFeatureDel.hidden = true;
+      createMeasureTooltip();
+      createHelpTooltip();
+      map.removeOverlay(measureInfo);
     }
   },
   this,
@@ -156,34 +195,6 @@ modify.on(
   },
   this,
 );
-
-function createMeasureTooltip() {
-  if (measureTooltipElement) {
-    measureTooltipElement.parentNode.removeChild(measureTooltipElement);
-  }
-  measureTooltipElement = document.createElement('div');
-  measureTooltipElement.className = 'tooltip tooltip-measure';
-  measureTooltip = new OLOverlay({
-    element: measureTooltipElement,
-    offset: [-50, -25],
-    positioning: 'bottom-center',
-  });
-  map.addOverlay(measureTooltip);
-}
-
-function createHelpTooltip() {
-  if (helpTooltipElement) {
-    helpTooltipElement.parentNode.removeChild(helpTooltipElement);
-  }
-  helpTooltipElement = document.createElement('div');
-  helpTooltipElement.className = 'tooltip hidden';
-  helpTooltip = new OLOverlay({
-    element: helpTooltipElement,
-    offset: [15, 0],
-    positioning: 'center-left',
-  });
-  map.addOverlay(helpTooltip);
-}
 
 function addInteraction() {
   draw = new OLDraw({
@@ -264,8 +275,8 @@ function addInteraction() {
       }, 251);
       // -----------------
       measureMode = 'none';
-      document.getElementById('measureLineCtrlBtn').style.backgroundColor = '';
-      document.getElementById('measureAreaCtrlBtn').style.backgroundColor = '';
+      document.getElementById('measureLineCtrlBtn').classList.remove('active');
+      document.getElementById('measureAreaCtrlBtn').classList.remove('active');
       createMeasureTooltip();
     },
     this,
@@ -284,6 +295,7 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
   i.innerHTML = 'timeline';
   const button = document.createElement('button');
   button.id = 'measureLineCtrlBtn';
+  button.title = 'Linie zeichnen';
   button.appendChild(i);
 
   //   var this_ = this;
@@ -293,11 +305,11 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
       map.removeInteraction(draw);
       map.addInteraction(select);
       map.addInteraction(modify);
-      button.style.backgroundColor = '';
+      button.classList.remove('active');
     } else {
       measureMode = 'LineString';
-      button.style.backgroundColor = 'rgba(0, 102, 0,.6)';
-      document.getElementById('measureAreaCtrlBtn').style.backgroundColor = '';
+      button.classList.add('active');
+      document.getElementById('measureAreaCtrlBtn').classList.remove('active');
       map.removeInteraction(draw);
       addInteraction();
     }
@@ -321,6 +333,7 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
 
   const button = document.createElement('button');
   button.id = 'measureAreaCtrlBtn';
+  button.title = 'Fläche zeichnen';
   const element = document.createElement('div');
 
   const setMeasureArea = () => {
@@ -329,11 +342,11 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
       map.removeInteraction(draw);
       map.addInteraction(select);
       map.addInteraction(modify);
-      button.style.backgroundColor = '';
+      button.classList.remove('active');
     } else {
       measureMode = 'Polygon';
-      button.style.backgroundColor = 'rgba(0, 102, 0,.6)';
-      document.getElementById('measureLineCtrlBtn').style.backgroundColor = '';
+      button.classList.add('active');
+      document.getElementById('measureLineCtrlBtn').classList.remove('active');
       map.removeInteraction(draw);
       addInteraction();
     }
@@ -361,6 +374,7 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
   const button = document.createElement('button');
   button.id = 'btn_feature_del';
   button.appendChild(i);
+  button.title = 'einzelne Features löschen';
 
   elBtnFeatureDel = document.createElement('div');
   elBtnFeatureDel.className = 'ol-control btn_feature_del'; // ol-unselectable
@@ -372,14 +386,13 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
     target: options.target,
   });
 };
-let btnEditActive = false;
+
 function editFeatures() {
-  if (btnEditActive) {
-    document.getElementById('btn_feature_edit').classList.remove('active');
-    btnEditActive = false;
+  const btn = document.getElementById('btn_feature_edit');
+  if (btn.className === 'active') {
+    btn.classList.remove('active');
   } else {
-    document.getElementById('btn_feature_edit').classList.add('active');
-    btnEditActive = true;
+    btn.classList.add('active');
   }
 }
 
@@ -393,6 +406,7 @@ const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
   const button = document.createElement('button');
   button.id = 'btn_feature_edit';
   button.appendChild(i);
+  button.title = 'Bearbeiten';
 
   button.addEventListener('click', editFeatures, false);
   button.addEventListener('touchstart', editFeatures, false);
@@ -412,6 +426,9 @@ function setupCtrls(olmap, vectorLayer) {
   map = olmap;
   vector = vectorLayer;
   source = vectorLayer.getSource();
+  source.on('change', () => {
+    enableBtnFeatureEdit(); // check if there is at least one feature to enable button
+  });
 
   const layerSwitcher = new OLLayerSwitcher({
     tipLabel: 'Karten',
@@ -426,6 +443,7 @@ function setupCtrls(olmap, vectorLayer) {
   olmap.addControl(new MeasureAreaControl());
   olmap.addControl(new FeatureEditControl());
   olmap.addControl(new FeatureDeleteControl());
+  enableBtnFeatureEdit();
 }
 
 export default {

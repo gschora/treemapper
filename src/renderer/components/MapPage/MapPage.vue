@@ -71,8 +71,11 @@
   #mapdiv #btn_feature_del:hover{
     background-color: rgba(255, 0, 0,.8);
   }
-  #mapdiv .btn_feature_edit button.active{
+  #mapdiv button.active{
     background-color: rgba(0, 102, 0,.6);
+  }
+  #mapdiv button:disabled{
+    background-color: rgba(0, 0, 0, 0.6);
   }
   .tooltip {
     position: relative;
@@ -83,6 +86,9 @@
     opacity: 0.7;
     white-space: nowrap;
   }
+  /* span.tooltip{
+    visibility: hidden;
+  } */
   .tooltip-measure {
     opacity: 1;
     font-weight: bold;
