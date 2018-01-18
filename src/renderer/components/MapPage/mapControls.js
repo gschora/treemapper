@@ -30,6 +30,7 @@ let measureTooltip;
 let measureInfoElement;
 let measureInfo;
 let elBtnFeatureDel;
+let elBtnFeatureEdit;
 // var continuePolygonMsg = 'Click to continue drawing the polygon';
 // var continueLineMsg = 'Click to continue drawing the line';
 const wgs84Sphere = new OLSphere(6378137);
@@ -134,7 +135,9 @@ select.on(
   'select',
   (evt) => {
     if (evt.selected.length > 0) {
-      elBtnFeatureDel.hidden = false;
+      if (document.getElementById('btn_feature_edit').className === 'active') {
+        elBtnFeatureDel.hidden = false;
+      }
       map.removeOverlay(measureInfo);
       const feat = evt.target
         .getFeatures()
@@ -392,10 +395,14 @@ function editFeatures() {
   const btn = document.getElementById('btn_feature_edit');
   if (btn.className === 'active') {
     btn.classList.remove('active');
+    elBtnFeatureDel.hidden = true;
     // map.addInteraction(select);
     // map.removeInteraction(modify);
   } else {
     btn.classList.add('active');
+    if (select.getFeatures().getArray().length > 0) {
+      elBtnFeatureDel.hidden = false;
+    }
     // map.addInteraction(select);
     // map.addInteraction(modify);
     // map.removeInteraction(draw);
@@ -417,7 +424,7 @@ const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
   button.addEventListener('click', editFeatures, false);
   button.addEventListener('touchstart', editFeatures, false);
 
-  const elBtnFeatureEdit = document.createElement('div');
+  elBtnFeatureEdit = document.createElement('div');
   elBtnFeatureEdit.className = 'ol-control btn_feature_edit'; // ol-unselectable
   elBtnFeatureEdit.appendChild(button);
   elBtnFeatureEdit.hidden = false;
