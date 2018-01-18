@@ -178,6 +178,7 @@ select.on(
       createMeasureTooltip();
       createHelpTooltip();
       map.removeOverlay(measureInfo);
+      map.removeOverlay(measureTooltip);
     }
   },
   this,
@@ -275,11 +276,14 @@ function addDrawInteraction() {
       // hack to fix drawend bug with doubleclick
       pauseDblClck(false);
       map.removeInteraction(draw);
-      map.addInteraction(select);
       setTimeout(() => {
         pauseDblClck(true);
       }, 251);
       // -----------------
+
+      select.getFeatures().clear();
+
+      map.addInteraction(select);
       measureMode = 'none';
       document.getElementById('measureLineCtrlBtn').classList.remove('active');
       document.getElementById('measureAreaCtrlBtn').classList.remove('active');
@@ -290,6 +294,35 @@ function addDrawInteraction() {
 
   createMeasureTooltip();
   createHelpTooltip();
+}
+
+function editFeatures() {
+  const btn = document.getElementById('btn_feature_edit');
+  if (btn.className === 'active') {
+    btn.classList.remove('active');
+    elBtnFeatureDel.hidden = true;
+    // map.addInteraction(select);
+    map.removeInteraction(modify);
+  } else {
+    btn.classList.add('active');
+    if (select.getFeatures().getArray().length > 0) {
+      elBtnFeatureDel.hidden = false;
+    }
+    // map.addInteraction(select);
+    map.addInteraction(modify);
+    map.removeInteraction(draw);
+    document.getElementById('measureLineCtrlBtn').classList.remove('active');
+    document.getElementById('measureAreaCtrlBtn').classList.remove('active');
+  }
+}
+function disableEditFeatures() {
+  const btn = document.getElementById('btn_feature_edit');
+  if (btn.className === 'active') {
+    btn.classList.remove('active');
+    elBtnFeatureDel.hidden = true;
+    // map.addInteraction(select);
+    map.removeInteraction(modify);
+  }
 }
 
 const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
@@ -306,6 +339,9 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
 
   //   var this_ = this;
   const setMeasureLine = () => {
+    map.removeOverlay(measureInfo);
+    map.removeOverlay(measureTooltip);
+
     if (measureMode === 'LineString') {
       measureMode = 'none';
       map.removeInteraction(draw);
@@ -318,6 +354,7 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
       document.getElementById('measureAreaCtrlBtn').classList.remove('active');
       map.removeInteraction(draw);
       addDrawInteraction();
+      disableEditFeatures();
     }
   };
 
@@ -343,6 +380,9 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
   const element = document.createElement('div');
 
   const setMeasureArea = () => {
+    map.removeOverlay(measureInfo);
+    map.removeOverlay(measureTooltip);
+
     if (measureMode === 'Polygon') {
       measureMode = 'none';
       map.removeInteraction(draw);
@@ -355,6 +395,7 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
       document.getElementById('measureLineCtrlBtn').classList.remove('active');
       map.removeInteraction(draw);
       addDrawInteraction();
+      disableEditFeatures();
     }
   };
 
@@ -392,24 +433,6 @@ const FeatureDeleteControl = function setupFeatDelCtrl(optOptions) {
     target: options.target,
   });
 };
-
-function editFeatures() {
-  const btn = document.getElementById('btn_feature_edit');
-  if (btn.className === 'active') {
-    btn.classList.remove('active');
-    elBtnFeatureDel.hidden = true;
-    // map.addInteraction(select);
-    map.removeInteraction(modify);
-  } else {
-    btn.classList.add('active');
-    if (select.getFeatures().getArray().length > 0) {
-      elBtnFeatureDel.hidden = false;
-    }
-    // map.addInteraction(select);
-    map.addInteraction(modify);
-    // map.removeInteraction(draw);
-  }
-}
 
 const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
   const options = optOptions || {};
