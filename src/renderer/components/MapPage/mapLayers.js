@@ -11,10 +11,21 @@ import OLTile from 'ol/layer/tile';
 import OLOSM from 'ol/source/osm';
 import OLTileImage from 'ol/source/tileimage';
 import OLCollection from 'ol/collection';
+import ls from 'ol3-layerswitcher';
 
 const capabilitiesUrl = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml';
 const features = new OLCollection();
 const source = new OLSVector({ features });
+
+function setMainLayer(layerTitle, layergroup) {
+  ls.forEachRecursive(layergroup, (la) => {
+    if (la.get('title') === layerTitle && la.get('type') === 'base') {
+      la.setVisible(true);
+    } else if (la.get('type') === 'base') {
+      la.setVisible(false);
+    }
+  });
+}
 
 /**
  * Sets up all Layers
@@ -30,6 +41,9 @@ function setupLayers(baselayers, overlaylayers) {
     source: new OLOSM({
       projection: 'EPSG:3857',
     }),
+  });
+  olsm.getSource().on('tileloaderror', () => {
+    setMainLayer('basemap.at Hidpi', baselayers);
   });
 
   const googleLayer = new OLTile({
@@ -139,4 +153,5 @@ function setupLayers(baselayers, overlaylayers) {
 
 export default {
   setupLayers,
+  setMainLayer,
 };

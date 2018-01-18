@@ -75,7 +75,7 @@ function formatArea(polygon) {
   // measuredArea = Math.round(area * 100) / 100;
 
   if (area > 10000) {
-    output = `${Math.round(area / 10) / 100} ha`;
+    output = `${Math.round(area / 10) / 1000} ha`;
   } else {
     output = `${Math.round(area * 100) / 100} m<sup>2</sup>`;
   }
@@ -88,6 +88,8 @@ function delFeature() {
     vector.getSource().removeFeature(f);
     select.getFeatures().clear();
   }
+  map.removeOverlay(measureInfo);
+  map.removeOverlay(measureTooltip);
   measureInfoElement.hidden = true;
   elBtnFeatureDel.hidden = true;
 
@@ -397,14 +399,14 @@ function editFeatures() {
     btn.classList.remove('active');
     elBtnFeatureDel.hidden = true;
     // map.addInteraction(select);
-    // map.removeInteraction(modify);
+    map.removeInteraction(modify);
   } else {
     btn.classList.add('active');
     if (select.getFeatures().getArray().length > 0) {
       elBtnFeatureDel.hidden = false;
     }
     // map.addInteraction(select);
-    // map.addInteraction(modify);
+    map.addInteraction(modify);
     // map.removeInteraction(draw);
   }
 }
