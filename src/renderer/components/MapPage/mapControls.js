@@ -196,7 +196,7 @@ modify.on(
   this,
 );
 
-function addInteraction() {
+function addDrawInteraction() {
   draw = new OLDraw({
     source,
     type: measureMode,
@@ -270,6 +270,7 @@ function addInteraction() {
       // hack to fix drawend bug with doubleclick
       pauseDblClck(false);
       map.removeInteraction(draw);
+      map.addInteraction(select);
       setTimeout(() => {
         pauseDblClck(true);
       }, 251);
@@ -304,14 +305,14 @@ const MeasureLineControl = function setupMeasLineCtrl(optOptions) {
       measureMode = 'none';
       map.removeInteraction(draw);
       map.addInteraction(select);
-      map.addInteraction(modify);
+      // map.addInteraction(modify);
       button.classList.remove('active');
     } else {
       measureMode = 'LineString';
       button.classList.add('active');
       document.getElementById('measureAreaCtrlBtn').classList.remove('active');
       map.removeInteraction(draw);
-      addInteraction();
+      addDrawInteraction();
     }
   };
 
@@ -340,15 +341,15 @@ const MeasureAreaControl = function setupMeasAreaCtrl(optOptions) {
     if (measureMode === 'Polygon') {
       measureMode = 'none';
       map.removeInteraction(draw);
-      map.addInteraction(select);
-      map.addInteraction(modify);
+      // map.addInteraction(select);
+      // map.addInteraction(modify);
       button.classList.remove('active');
     } else {
       measureMode = 'Polygon';
       button.classList.add('active');
       document.getElementById('measureLineCtrlBtn').classList.remove('active');
       map.removeInteraction(draw);
-      addInteraction();
+      addDrawInteraction();
     }
   };
 
@@ -391,8 +392,13 @@ function editFeatures() {
   const btn = document.getElementById('btn_feature_edit');
   if (btn.className === 'active') {
     btn.classList.remove('active');
+    // map.addInteraction(select);
+    // map.removeInteraction(modify);
   } else {
     btn.classList.add('active');
+    // map.addInteraction(select);
+    // map.addInteraction(modify);
+    // map.removeInteraction(draw);
   }
 }
 
