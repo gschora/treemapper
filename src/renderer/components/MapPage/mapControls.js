@@ -75,9 +75,9 @@ function formatArea(polygon) {
   // measuredArea = Math.round(area * 100) / 100;
 
   if (area > 10000) {
-    output = `${Math.round(area)} ha`;
+    output = `${Math.round(area / 10) / 100} ha`;
   } else {
-    output = `${Math.round(area)} m<sup>2</sup>`;
+    output = `${Math.round(area * 100) / 100} m<sup>2</sup>`;
   }
   return output;
 }
@@ -457,6 +457,7 @@ function setupCtrls(olmap, vectorLayer) {
   olmap.addControl(new FeatureEditControl());
   olmap.addControl(new FeatureDeleteControl());
   enableBtnFeatureEdit();
+  map.addInteraction(select);
 }
 
 export default {
