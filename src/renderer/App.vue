@@ -28,6 +28,15 @@
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TreeMapper</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <vue-google-autocomplete
+        id="searchAddressTxt"
+        classname="form-control"
+        placeholder="Adresse suchen"
+        v-on:placechanged="getAddressData"
+        >
+      </vue-google-autocomplete>
+      <v-icon>search</v-icon>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
@@ -50,6 +59,8 @@
 </template>
 
 <script>
+  import VueGoogleAutocomplete from './components/AddressSearch/AddressSearch.vue';
+
   export default {
     name: 'treemapper',
     data: () => ({
@@ -58,10 +69,20 @@
     props: {
       source: String,
     },
+    components: {
+      VueGoogleAutocomplete,
+    },
+    methods: {
+      getAddressData(addressData, placeResultData, id) {
+        window.ad = addressData;
+        window.prd = placeResultData;
+        window.aid = id;
+      },
+    },
   };
   import('../../node_modules/vuetify/dist/vuetify.css');
 </script>
 
 <style>
-  /* CSS */
+
 </style>
