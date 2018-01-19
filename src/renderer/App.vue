@@ -7,7 +7,7 @@
       app
     >
     <v-list dense three-line>
-        <v-list-tile @click.stop="drawer = !drawer">
+        <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>map</v-icon>
           </v-list-tile-action>
@@ -15,7 +15,7 @@
             <v-list-tile-title>Karte</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click.stop="drawer = !drawer">
+        <v-list-tile to="/settings">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -29,20 +29,20 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TreeMapper</v-toolbar-title>
       <v-spacer></v-spacer>
-      <vue-google-autocomplete
-        id="searchAddressTxt"
-        classname="form-control"
-        placeholder="Adresse suchen"
-        v-on:placechanged="getAddressData"
-        >
-      </vue-google-autocomplete>
-      <v-icon>search</v-icon>
+        <vue-google-autocomplete
+          id="searchAddressTxt"
+          classname="form-control"
+          placeholder="Adresse suchen"
+          v-on:placechanged="getAddressData"
+          v-if="$route.path == '/'"
+          >
+        </vue-google-autocomplete>
+        <v-icon v-if="$route.path == '/'">search</v-icon>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
               <router-view></router-view>
-
           <!-- <v-tooltip right>
             <v-btn icon large :href="source" target="_blank" slot="activator">
               <v-icon large>code</v-icon>

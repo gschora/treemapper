@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/MapPage/MapPage.vue').default,
     },
     {
+      path: '/settings',
+      name: 'settings-page',
+      component: require('@/components/SettingsPage/SettingsPage.vue').default,
+    },
+    {
       path: '*',
       redirect: '/',
     },
