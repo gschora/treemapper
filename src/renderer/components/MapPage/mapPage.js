@@ -20,12 +20,16 @@ const overlaylayers = new OLGroup({
 export default {
   initMap: () => {
     let veclayer;
+    let center;
     if (baselayers.getLayersArray().length === 0) {
       veclayer = mpl.setupLayers(baselayers, overlaylayers);
+      center = [1762780, 5998033];
     } else {
       veclayer = window.veclayer;
+      center = omap.getView().getCenter();
     }
-
+    // // eslint-disable-next-line no-console
+    // console.log(omap);
     veclayer.setZIndex(10);
 
     omap = new OLMap({
@@ -35,7 +39,7 @@ export default {
         attribution: false,
       }),
       view: new OLView({
-        center: [1762780, 5998033],
+        center,
         zoom: 10,
         projection: 'EPSG:3857',
       }),
@@ -43,7 +47,5 @@ export default {
     mpc.setupCtrls(omap, veclayer);
     window.omap = omap;
     window.veclayer = veclayer;
-
-    omap.renderSync();
   },
 };
