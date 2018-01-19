@@ -30,10 +30,13 @@
     height: 100%;
   }
   .layer-switcher .panel{
-    background-color: rgba(0,60,136,0.5);
+    background-color: rgba(0,60,136,0.8);
   }
-  .layer-switcher{
+  .ol-control.layer-switcher {
     top: 0.5em;
+    left: 6em;
+    right: inherit;
+    z-index: 1;
   }
   .layer-switcher button{
     background-image: url('./icons/ic_layers_white_36dp_1x.png');
@@ -42,26 +45,30 @@
     font-size: 2em;
     background-color: rgba(0,60,136,0.6);
   }
+  #mapdiv .ol-control button:hover{
+    font-size: 2em;
+    background-color: rgba(0,60,136,0.8);
+  }
   #mapdiv .ol-rotate{
     top: 3.5em;
   }
   .btn_measure_line {
-    top: 100px;
+    top: 7em;
     left: .5em;
   }
   .btn_measure_area {
-    top: 10em;
+    top: 9.9em;
     left: .5em;
   }
   #mapdiv .btn_feature_edit {
-    top: 12.9em;
+    top: 12.8em;
     left: .5em;
   }
   #measureAreaCtrlBtn {
     background-image: url('./icons/vector-polygon.png');
   }
   #mapdiv .btn_feature_del{
-    top: 15.9em;
+    top: 15.7em;
     left: .5em;
     /* background-color: rgba(255, 0, 0,.5); */
   }

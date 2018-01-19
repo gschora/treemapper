@@ -79,13 +79,13 @@ function setupLayers(baselayers, overlaylayers) {
         color: 'rgba(255, 255, 255, 0.4)',
       }),
       stroke: new OLStroke({
-        color: '#ffcc33',
-        width: 2,
+        color: '#FF8000',
+        width: 3,
       }),
       image: new OLCircle({
         radius: 7,
         fill: new OLFill({
-          color: '#ffcc33',
+          color: '#FF8000',
         }),
       }),
     }),

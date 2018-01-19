@@ -84,10 +84,12 @@ function formatArea(polygon) {
 
 function delFeature() {
   if (select.getFeatures().getLength() > 0) {
-    const f = select.getFeatures().item(0);
-    vector.getSource().removeFeature(f);
+    select.getFeatures().forEach((f) => {
+      vector.getSource().removeFeature(f);
+    });
     select.getFeatures().clear();
   }
+
   map.removeOverlay(measureInfo);
   map.removeOverlay(measureTooltip);
   measureInfoElement.hidden = true;
@@ -211,17 +213,18 @@ function addDrawInteraction() {
         color: 'rgba(0,60,136, 0.3)',
       }),
       stroke: new OLStroke({
-        color: 'rgba(0, 0, 0, 0.5)',
+        color: 'rgba(255, 128, 0, 1)',
         lineDash: [10, 10],
-        width: 2,
+        width: 3,
       }),
       image: new OLCircle({
         radius: 5,
         stroke: new OLStroke({
-          color: 'rgba(0, 0, 0, 0.7)',
+          color: 'rgba(255, 128, 0, 1)',
+          width: 3,
         }),
         fill: new OLFill({
-          color: 'rgba(0,60,136, 0.2)',
+          color: 'rgba(0,60,136, 0.5)',
         }),
       }),
     }),
