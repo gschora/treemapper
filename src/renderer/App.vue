@@ -87,6 +87,10 @@
 </script>
 
 <style>
+.list__tile--active .list__tile__action,
+.list__tile--active .list__tile__content{
+  color: white;
+}
 .pac-container {
   background: #212121;
   color: white;
