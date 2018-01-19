@@ -31,11 +31,9 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TreeMapper</v-toolbar-title>
       <v-layout class="mx-2">
-        <!-- <v-btn fab outline small color="green darken-1"> -->
-          <v-icon large color="green darken-1" 
-          class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
-          >mdi-pine-tree</v-icon>
-        <!-- </v-btn> -->
+        <v-icon large color="green darken-1" 
+        class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
+        >mdi-pine-tree</v-icon>
       </v-layout>
         <v-icon class="mr-1" v-if="$route.path == '/'">search</v-icon>
         <vue-google-autocomplete
