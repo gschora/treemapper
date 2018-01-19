@@ -3,6 +3,7 @@
       <v-navigation-drawer
       clipped
       fixed
+      temporary
       v-model='drawer'
       app
     >
@@ -86,5 +87,21 @@
 </script>
 
 <style>
-
+.pac-container {
+  background: #212121;
+  color: white;
+}
+.pac-item:hover {
+  background: #404040;
+}
+.pac-item-query {
+  color: white;
+}
+.pac-item-selected {
+  background: #404040;
+  color: white;
+}
+.pac-matched {
+  color: white;
+}
 </style>
