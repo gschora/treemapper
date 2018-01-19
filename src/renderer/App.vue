@@ -59,6 +59,7 @@
 </template>
 
 <script>
+  import OLProj from 'ol/proj';
   import VueGoogleAutocomplete from './components/AddressSearch/AddressSearch.vue';
 
   export default {
@@ -74,8 +75,9 @@
     },
     methods: {
       getAddressData(addressData, placeResultData, id) {
+        window.omap.getView().setCenter(OLProj.transform([addressData.longitude, addressData.latitude], 'EPSG:4326', 'EPSG:3857'));
+        window.omap.getView().setZoom(16);
         window.ad = addressData;
-        window.prd = placeResultData;
         window.aid = id;
       },
     },
