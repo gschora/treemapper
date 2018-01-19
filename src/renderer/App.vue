@@ -16,6 +16,7 @@
             <v-list-tile-title>Karte</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-divider></v-divider>
         <v-list-tile to="/settings">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
@@ -29,7 +30,14 @@
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TreeMapper</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-layout class="mx-2">
+        <!-- <v-btn fab outline small color="green darken-1"> -->
+          <v-icon large color="green darken-1" 
+          class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
+          >mdi-pine-tree</v-icon>
+        <!-- </v-btn> -->
+      </v-layout>
+        <v-icon class="mr-1" v-if="$route.path == '/'">search</v-icon>
         <vue-google-autocomplete
           id="searchAddressTxt"
           classname="form-control"
@@ -38,7 +46,9 @@
           v-if="$route.path == '/'"
           >
         </vue-google-autocomplete>
-        <v-icon v-if="$route.path == '/'">search</v-icon>
+        <v-btn fab v-if="$route.path == '/'">
+          <v-icon>place</v-icon>
+        </v-btn>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
