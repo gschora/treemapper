@@ -44,9 +44,17 @@
           v-if="$route.path == '/'"
           >
         </vue-google-autocomplete>
-        <v-btn fab v-if="$route.path == '/'">
-          <v-icon>place</v-icon>
-        </v-btn>
+        <v-speed-dial hover direction="bottom" v-if="$route.path == '/'">
+          <v-btn fab slot="activator" hover>
+            <v-icon>place</v-icon>
+          </v-btn>
+          <v-btn fab dark small color="indigo">
+            <v-icon>add</v-icon>
+          </v-btn>
+          <v-btn fab dark small color="red">
+            <v-icon>delete</v-icon>
+          </v-btn>
+        </v-speed-dial>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
