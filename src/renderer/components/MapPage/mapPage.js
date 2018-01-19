@@ -47,5 +47,8 @@ export default {
     mpc.setupCtrls(omap, veclayer);
     window.omap = omap;
     window.veclayer = veclayer;
+    setTimeout(() => {
+      omap.updateSize();
+    }, 200);
   },
 };
