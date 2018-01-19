@@ -6,7 +6,8 @@ import OLControl from 'ol/control';
 import mpl from './mapLayers';
 import mpc from './mapControls';
 
-let omap = null;
+let omap;
+
 const baselayers = new OLGroup({
   title: 'Hauptkarten',
   layers: new OLCollection(),
@@ -18,8 +19,15 @@ const overlaylayers = new OLGroup({
 
 export default {
   initMap: () => {
-    const veclayer = mpl.setupLayers(baselayers, overlaylayers);
+    let veclayer;
+    if (baselayers.getLayersArray().length === 0) {
+      veclayer = mpl.setupLayers(baselayers, overlaylayers);
+    } else {
+      veclayer = window.veclayer;
+    }
+
     veclayer.setZIndex(10);
+
     omap = new OLMap({
       layers: [overlaylayers, baselayers],
       target: 'mapdiv',
@@ -35,6 +43,7 @@ export default {
     mpc.setupCtrls(omap, veclayer);
     window.omap = omap;
     window.veclayer = veclayer;
+
     omap.renderSync();
   },
 };
