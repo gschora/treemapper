@@ -15,6 +15,9 @@ import OLOverlay from 'ol/overlay';
 import OLPolygon from 'ol/geom/polygon';
 import OLLineString from 'ol/geom/linestring';
 import OLIDblClkZoom from 'ol/interaction/doubleclickzoom';
+// import OLCoordinate from 'ol/coordinate';
+// import OLMousePosition from 'ol/control/mouseposition';
+
 // import OLCollection from 'ol/collection';
 
 // import OLControl from 'ol/control';
@@ -23,6 +26,8 @@ import { setTimeout } from 'timers';
 
 let map;
 let sketch;
+let addressTooltip;
+let addressTooltipElement;
 let helpTooltipElement;
 let helpTooltip;
 let measureTooltipElement;
@@ -119,6 +124,20 @@ function createMeasureTooltip() {
     positioning: 'bottom-center',
   });
   map.addOverlay(measureTooltip);
+}
+
+function createAddressTooltip() {
+  if (addressTooltipElement) {
+    addressTooltipElement.parentNode.removeChild(addressTooltipElement);
+  }
+  addressTooltipElement = document.createElement('div');
+  addressTooltipElement.className = 'tooltip tooltip-address';
+  addressTooltip = new OLOverlay({
+    element: addressTooltipElement,
+    offset: [2, -5],
+    positioning: 'bottom-center',
+  });
+  map.addOverlay(addressTooltip);
 }
 
 function createHelpTooltip() {
@@ -463,6 +482,56 @@ const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
   });
 };
 
+// const MousePositionControl = new OLMousePosition({
+//   coordinateFormat: OLCoordinate.createStringXY(6),
+//   projection: 'EPSG:4326',
+//   // comment the following two lines to have the mouse position
+//   // be placed within the map.
+//   // className: 'custom-mouse-position',
+//   target: document.getElementById('map-coord'),
+//   undefinedHTML: '&nbsp;',
+// });
+
+function reverseGeoCode(latlng) {
+  /* global google */
+  const geocoder = new google.maps.Geocoder();
+
+  geocoder.geocode({ location: latlng }, (results, status) => {
+    if (status === 'OK') {
+      if (results.length > 0) {
+        // map
+        // .getView()
+        // .setCenter(OLProj.transform([latlng.lng, latlng.lat], 'EPSG:4326', 'EPSG:3857'));
+        createAddressTooltip();
+        addressTooltipElement.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
+          6,
+        )} ${latlng.lng.toFixed(6)}`;
+        addressTooltip.setPosition(
+          OLProj.transform([latlng.lng, latlng.lat], 'EPSG:4326', 'EPSG:3857'),
+        );
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No location results found');
+      }
+    } else {
+      // window.alert('Geocoder failed due to: ' + status);
+    }
+  });
+}
+
+function rightClick() {
+  map.getViewport().addEventListener('contextmenu', (e) => {
+    // contextmenu is right-click
+    e.preventDefault();
+    const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
+    const latlng = { lat: coor[1], lng: coor[0] };
+    reverseGeoCode(latlng);
+    // eslint-disable-next-line no-console
+    // console.log(coor);
+    window.e = e;
+  });
+}
+
 function setupCtrls(olmap, vectorLayer) {
   map = olmap;
   vector = vectorLayer;
@@ -480,12 +549,15 @@ function setupCtrls(olmap, vectorLayer) {
   ol.inherits(MeasureAreaControl, OLCControl);
   ol.inherits(FeatureEditControl, OLCControl);
   ol.inherits(FeatureDeleteControl, OLCControl);
+
   olmap.addControl(new MeasureLineControl());
   olmap.addControl(new MeasureAreaControl());
   olmap.addControl(new FeatureEditControl());
   olmap.addControl(new FeatureDeleteControl());
   enableBtnFeatureEdit();
   map.addInteraction(select);
+
+  rightClick();
 }
 
 export default {

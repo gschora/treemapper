@@ -17,7 +17,7 @@
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
-        <v-list-tile to="/settings">
+        <v-list-tile to="/settings" disabled>
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -31,7 +31,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TreeMapper</v-toolbar-title>
       <v-layout class="mx-2">
-        <v-icon large color="green darken-1" 
+        <v-icon id="christbam-logo" large color="green darken-1" 
         class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
         >mdi-pine-tree</v-icon>
       </v-layout>
@@ -48,7 +48,7 @@
           <v-btn fab slot="activator" hover>
             <v-icon>place</v-icon>
           </v-btn>
-          <v-btn fab dark small color="indigo">
+          <v-btn fab dark small color="indigo" @click.native="getAddressToLocation">
             <v-icon>add</v-icon>
           </v-btn>
           <v-btn fab dark small color="red">
@@ -71,6 +71,8 @@
     </v-content>
     <v-footer app fixed>
       <span>&copy; 2018 gschora</span>
+      <v-spacer></v-spacer>
+      <span id='map-coord'></span>
     </v-footer>
   </v-app>
 </template>
@@ -96,6 +98,15 @@
         window.omap.getView().setZoom(16);
         window.ad = addressData;
         window.aid = id;
+      },
+      getAddressToLocation() {
+        // const center = window.omap.getView().getCenter();
+        // const t = OLProj.transform([center[0], center[1]], 'EPSG:3857', 'EPSG:4326');
+        // const latlng = {
+        //   lat: t[1],
+        //   lng: t[0],
+        // };
+        // VueGoogleAutocomplete.methods.reverseGeoCode(latlng.lat, latlng.lng);
       },
     },
   };
@@ -123,5 +134,9 @@
 }
 .pac-matched {
   color: white;
+}
+#christbam-logo:hover{
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
 }
 </style>

@@ -202,22 +202,6 @@ export default {
         }
       }
     },
-    reverseGeoCode(latitude, longitude) {
-      const geocoder = new google.maps.Geocoder();
-      const latlng = { lat: parseFloat(latitude), lng: parseFloat(longitude) };
-      geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === 'OK') {
-          if (results[1]) {
-            // eslint-disable-next-line no-console
-            console.log(results[1].formatted_address);
-          } else {
-            // window.alert('No results found');
-          }
-        } else {
-          // window.alert('Geocoder failed due to: ' + status);
-        }
-      });
-    },
   },
 };
 

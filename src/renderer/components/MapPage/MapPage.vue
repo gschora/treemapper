@@ -41,6 +41,9 @@
   .layer-switcher button{
     background-image: url('./icons/ic_layers_white_36dp_1x.png');
   }
+  .ol-mouse-position{
+    color: white;
+  }
   #mapdiv .ol-control button{
     font-size: 2em;
     background-color: rgba(0,60,136,0.6);
@@ -100,12 +103,18 @@
     opacity: 1;
     font-weight: bold;
   }
+  .tooltip-address {
+    opacity: 1;
+    font-weight: bold;
+    text-align: center;
+  }
   .tooltip-static {
     background-color: #ffcc33;
     color: black;
     border: 1px solid white;
   }
   .tooltip-measure:before,
+  .tooltip-address:before,
   .tooltip-static:before {
       border-top: 6px solid rgba(0, 0, 0, 0.5);
       border-right: 6px solid transparent;
