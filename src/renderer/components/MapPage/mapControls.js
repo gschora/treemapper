@@ -523,12 +523,18 @@ function rightClick() {
   map.getViewport().addEventListener('contextmenu', (e) => {
     // contextmenu is right-click
     e.preventDefault();
-    const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
-    const latlng = { lat: coor[1], lng: coor[0] };
-    reverseGeoCode(latlng);
+
+    if (addressTooltipElement && addressTooltipElement.innerHTML !== '') {
+      createAddressTooltip();
+    } else {
+      const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
+      const latlng = { lat: coor[1], lng: coor[0] };
+      reverseGeoCode(latlng);
+    }
+
     // eslint-disable-next-line no-console
     // console.log(coor);
-    window.e = e;
+    window.e = addressTooltipElement;
   });
 }
 
@@ -542,6 +548,7 @@ function setupCtrls(olmap, vectorLayer) {
 
   const layerSwitcher = new OLLayerSwitcher({
     tipLabel: 'Karten',
+    className: 'mdi',
   });
   olmap.addControl(layerSwitcher);
 
