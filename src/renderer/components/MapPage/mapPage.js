@@ -47,6 +47,7 @@ export default {
     mpc.setupCtrls(omap, veclayer);
     window.omap = omap;
     window.veclayer = veclayer;
+    // fix for distorted map on start
     setTimeout(() => {
       omap.updateSize();
     }, 200);
