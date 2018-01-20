@@ -109,9 +109,12 @@
     text-align: center;
   }
   .tooltip-static {
-    background-color: #ffcc33;
-    color: black;
-    border: 1px solid white;
+    background-color: rgba(255, 153, 0, 0.8);
+    color: white;
+    /* border: 1px solid white; */
+    font-weight: bold;
+    text-align: center;
+    opacity: 1;
   }
   .tooltip-measure:before,
   .tooltip-address:before,
@@ -126,6 +129,6 @@
       left: 50%;
   }
   .tooltip-static:before {
-      border-top-color: #ffcc33;
+      border-top-color: rgba(255, 153, 0, 0.8);
   }
 </style>
