@@ -110,7 +110,8 @@
       },
     },
   };
-  import('../../node_modules/vuetify/dist/vuetify.css');
+  import('vuetify/dist/vuetify.css');
+  import('mdi/css/materialdesignicons.min.css');
 </script>
 
 <style>
@@ -135,8 +136,18 @@
 .pac-matched {
   color: white;
 }
-#christbam-logo:hover{
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
+#christbam-logo{
+  animation: roll 50s infinite;
+}
+@keyframes roll {
+  0% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(0.7);
+  }
 }
 </style>

@@ -29,7 +29,7 @@
     width: 100%;
     height: 100%;
   }
-  .layer-switcher .panel{
+  #mapdiv .layer-switcher .panel{
     background-color: rgba(0,60,136,0.8);
   }
   .ol-control.layer-switcher {
@@ -38,7 +38,7 @@
     right: inherit;
     z-index: 1;
   }
-  .layer-switcher button{
+  #mapdiv .layer-switcher button{
     background-image: url('./icons/ic_layers_white_36dp_1x.png');
   }
   .ol-mouse-position{
@@ -116,7 +116,7 @@
   .tooltip-measure:before,
   .tooltip-address:before,
   .tooltip-static:before {
-      border-top: 6px solid rgba(0, 0, 0, 0.5);
+      border-top: 6px solid  rgba(255, 153, 0, 0.8);
       border-right: 6px solid transparent;
       border-left: 6px solid transparent;
       content: "";
