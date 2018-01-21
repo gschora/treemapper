@@ -137,20 +137,20 @@
   color: white;
 }
 #christbam-logo{
-  animation: roll 30s linear infinite;
+  animation: roll 60s linear infinite;
 }
 @keyframes roll {
   0% {
     /* transform: rotate(0deg); */
   }
-  30% {
+  70% {
         color: white;
     /* transform: rotate(360deg); */
   }
-  50%{
+  80%{
         color: yellow;
   }
-  70%{
+  90%{
         color: #0099ff;
   }
   100% {
