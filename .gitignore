@@ -13,3 +13,4 @@ build/icons/icon.ico
 build/icons/icon.icns
 build/icons/256x256.png
 appveyor.yml
+static/treedb

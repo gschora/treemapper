@@ -17,13 +17,28 @@ const overlaylayers = new OLGroup({
   layers: new OLCollection(),
 });
 
+function readDb() {
+  window.db
+    .info()
+    .then((info) => {
+      // eslint-disable-next-line no-console
+      console.log(info);
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    });
+}
+
 export default {
   initMap: () => {
+    readDb();
+
     let veclayer;
     let center;
     if (baselayers.getLayersArray().length === 0) {
       veclayer = mpl.setupLayers(baselayers, overlaylayers);
-      center = [1762780, 5998033];
+      center = window.mainSettings.homeCoords;
     } else {
       veclayer = window.veclayer;
       center = omap.getView().getCenter();
@@ -40,7 +55,7 @@ export default {
       }),
       view: new OLView({
         center,
-        zoom: 10,
+        zoom: window.mainSettings.defaulZoom,
         projection: 'EPSG:3857',
       }),
     });

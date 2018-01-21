@@ -140,6 +140,7 @@ function setupLayers(baselayers, overlaylayers) {
         baselayers.getLayers().push(bmapGrau);
         baselayers.getLayers().push(bmapHidpiLayer);
         baselayers.getLayers().push(olsm);
+        setMainLayer(window.mainSettings.startMap, baselayers);
       });
   } catch (error) {
     // if fetch capabilities is not working add at least other layers
