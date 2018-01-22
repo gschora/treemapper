@@ -17,18 +17,7 @@ const overlaylayers = new OLGroup({
   layers: new OLCollection(),
 });
 
-function readDb() {
-  window.db
-    .info()
-    .then((info) => {
-      // eslint-disable-next-line no-console
-      console.log(info);
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    });
-}
+function readDb() {}
 
 export default {
   initMap: () => {
@@ -55,7 +44,7 @@ export default {
       }),
       view: new OLView({
         center,
-        zoom: window.mainSettings.defaulZoom,
+        zoom: window.mainSettings.defaultZoom,
         projection: 'EPSG:3857',
       }),
     });

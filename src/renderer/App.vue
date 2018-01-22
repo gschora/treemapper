@@ -17,7 +17,7 @@
           </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
-        <v-list-tile to="/settings" disabled>
+        <v-list-tile to="/settings">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>

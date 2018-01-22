@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import Vuetify from 'vuetify';
-import PouchDB from 'pouchdb';
-import PouchNodeWebSql from 'pouchdb-adapter-node-websql';
-import path from 'path';
+import lfdb from 'localforage';
 
 import App from './App';
 import router from './router';
@@ -23,13 +21,23 @@ new Vue({
   template: '<App/>',
 }).$mount('#app');
 
-PouchDB.plugin(PouchNodeWebSql);
-const db = new PouchDB(path.join(__static, '/treedb'), { adapter: 'websql' });
-
-window.db = db;
-
 window.mainSettings = {
-  defaulZoom: 8,
+  defaultZoom: 8,
   homeCoords: [1765230, 5993680],
   startMap: 'Openstreetmap',
 };
+
+window.lfdb = lfdb;
+
+lfdb.getItem('mainSettings').then((val) => {
+  if (val === null) {
+    lfdb.setItem('mainSettings', window.mainSettings).then((value) => {
+      // eslint-disable-next-line no-console
+      console.log(value);
+    });
+  } else {
+    window.mainSettings = val;
+    window.omap.getView().setZoom(val.defaultZoom);
+    window.omap.getView().setCenter(val.homeCoords);
+  }
+});
