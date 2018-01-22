@@ -27,7 +27,7 @@
 <style>
   #mapdiv {
     width: 100%;
-    height: 100%;
+    height: 97%;
   }
   #mapdiv .layer-switcher .panel{
     background-color: rgba(0,60,136,0.8);
