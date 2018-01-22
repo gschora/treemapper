@@ -18,16 +18,16 @@ const overlaylayers = new OLGroup({
 });
 
 function readDb() {
-  window.db
-    .info()
-    .then((info) => {
-      // eslint-disable-next-line no-console
-      console.log(info);
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    });
+  // window.db
+  //   .info()
+  //   .then((info) => {
+  //     // eslint-disable-next-line no-console
+  //     console.log(info);
+  //   })
+  //   .catch((err) => {
+  //     // eslint-disable-next-line no-console
+  //     console.error(err);
+  //   });
 }
 
 export default {
