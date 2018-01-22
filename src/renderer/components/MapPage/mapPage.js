@@ -36,6 +36,7 @@ export default {
 
     let veclayer;
     let center;
+
     if (baselayers.getLayersArray().length === 0) {
       veclayer = mpl.setupLayers(baselayers, overlaylayers);
       center = window.mainSettings.homeCoords;
@@ -66,5 +67,13 @@ export default {
     setTimeout(() => {
       omap.updateSize();
     }, 200);
+
+    // sets zoom level to stay same when switching to settings page
+    omap.getView().on('change:resolution', (ev) => {
+      const zl = Math.round(ev.target.getZoom());
+      if (zl !== window.mainSettings.defaulZoom) {
+        window.mainSettings.defaulZoom = zl;
+      }
+    });
   },
 };
