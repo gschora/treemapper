@@ -95,7 +95,7 @@
     methods: {
       getAddressData(addressData, placeResultData, id) {
         window.omap.getView().setCenter(OLProj.transform([addressData.longitude, addressData.latitude], 'EPSG:4326', 'EPSG:3857'));
-        window.omap.getView().setZoom(16);
+        window.omap.getView().setZoom(window.mainSettings.addressZoom);
         window.ad = addressData;
         window.aid = id;
       },

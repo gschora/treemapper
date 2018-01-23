@@ -26,7 +26,9 @@ new Vue({
 }).$mount('#app');
 
 window.mainSettings = {
+  _id: 'mainSettings',
   defaultZoom: 8,
+  addressZoom: 17,
   homeCoords: [1765230, 5993680],
   startMap: 'Openstreetmap',
 };
