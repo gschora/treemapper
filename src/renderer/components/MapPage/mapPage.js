@@ -60,8 +60,8 @@ export default {
     // sets zoom level to stay same when switching to settings page
     omap.getView().on('change:resolution', (ev) => {
       const zl = Math.round(ev.target.getZoom());
-      if (zl !== window.mainSettings.defaulZoom) {
-        window.mainSettings.defaulZoom = zl;
+      if (zl !== window.mainSettings.defaultZoom) {
+        window.mainSettings.defaultZoom = zl;
       }
     });
   },
