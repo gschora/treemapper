@@ -37,9 +37,9 @@ window.lfdb = lfdb;
 
 lfdb.getItem('mainSettings').then((val) => {
   if (val === null) {
-    lfdb.setItem('mainSettings', window.mainSettings).then((value) => {
+    lfdb.setItem('mainSettings', window.mainSettings).then(() => {
       // eslint-disable-next-line no-console
-      console.log(value);
+      // console.log(value);
     });
   } else {
     window.mainSettings = val;

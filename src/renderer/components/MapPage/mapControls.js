@@ -15,7 +15,7 @@ import OLOverlay from 'ol/overlay';
 import OLPolygon from 'ol/geom/polygon';
 import OLLineString from 'ol/geom/linestring';
 import OLIDblClkZoom from 'ol/interaction/doubleclickzoom';
-import OLFormat from 'ol/format/wkt';
+import OLFormat from 'ol/format/geojson';
 // import OLCoordinate from 'ol/coordinate';
 // import OLMousePosition from 'ol/control/mouseposition';
 
@@ -107,20 +107,24 @@ function delFeature() {
 
 function autoSaveFeaturesInDb() {
   const formatFeature = new OLFormat();
-  const f = formatFeature.writeFeatures(source.getFeatures());
-  window.lfdb.setItem('drawnFeatures', f).catch((err) => {
-    // eslint-disable-next-line no-console
-    console.err(err);
+  const fs = [];
+  source.getFeatures().forEach((feat) => {
+    fs.push(formatFeature.writeFeature(feat));
   });
+  window.lfdb.setItem('drawnFeatures', fs).catch(() => {});
 }
 
 function getDrawnFeaturesFromDb() {
   const formatFeature = new OLFormat();
-  let f;
+
   window.lfdb.getItem('drawnFeatures').then((val) => {
     if (val !== null) {
-      f = formatFeature.readFeatures(val);
-      source.addFeatures(f);
+      // disable eventlistener, otherwise the features added will added in db
+      source.un('addfeature', autoSaveFeaturesInDb);
+      val.forEach((item) => {
+        source.addFeature(formatFeature.readFeature(item));
+      });
+      source.on('addfeature', autoSaveFeaturesInDb);
     }
   });
 }
@@ -571,9 +575,7 @@ function setupCtrls(olmap, vectorLayer) {
     enableBtnFeatureEdit(); // check if there is at least one feature to enable button
   });
 
-  source.on('addfeature', () => {
-    autoSaveFeaturesInDb();
-  });
+  source.on('addfeature', autoSaveFeaturesInDb);
 
   source.on('removefeature', () => {
     autoSaveFeaturesInDb();
