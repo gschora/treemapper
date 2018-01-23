@@ -17,6 +17,7 @@ const overlaylayers = new OLGroup({
   layers: new OLCollection(),
 });
 
+<<<<<<< HEAD
 function readDb() {
   // window.db
   //   .info()
@@ -29,6 +30,9 @@ function readDb() {
   //     console.error(err);
   //   });
 }
+=======
+function readDb() {}
+>>>>>>> feature/localforage
 
 export default {
   initMap: () => {
@@ -56,7 +60,7 @@ export default {
       }),
       view: new OLView({
         center,
-        zoom: window.mainSettings.defaulZoom,
+        zoom: window.mainSettings.defaultZoom,
         projection: 'EPSG:3857',
       }),
     });
