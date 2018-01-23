@@ -17,22 +17,7 @@ const overlaylayers = new OLGroup({
   layers: new OLCollection(),
 });
 
-<<<<<<< HEAD
-function readDb() {
-  // window.db
-  //   .info()
-  //   .then((info) => {
-  //     // eslint-disable-next-line no-console
-  //     console.log(info);
-  //   })
-  //   .catch((err) => {
-  //     // eslint-disable-next-line no-console
-  //     console.error(err);
-  //   });
-}
-=======
 function readDb() {}
->>>>>>> feature/localforage
 
 export default {
   initMap: () => {
