@@ -15,6 +15,7 @@ import OLOverlay from 'ol/overlay';
 import OLPolygon from 'ol/geom/polygon';
 import OLLineString from 'ol/geom/linestring';
 import OLIDblClkZoom from 'ol/interaction/doubleclickzoom';
+import OLFormat from 'ol/format/wkt';
 // import OLCoordinate from 'ol/coordinate';
 // import OLMousePosition from 'ol/control/mouseposition';
 
@@ -102,6 +103,26 @@ function delFeature() {
 
   elBtnFeatureDel.removeEventListener('click', delFeature, false);
   elBtnFeatureDel.removeEventListener('touchstart', delFeature, false);
+}
+
+function autoSaveFeaturesInDb() {
+  const formatFeature = new OLFormat();
+  const f = formatFeature.writeFeatures(source.getFeatures());
+  window.lfdb.setItem('drawnFeatures', f).catch((err) => {
+    // eslint-disable-next-line no-console
+    console.err(err);
+  });
+}
+
+function getDrawnFeaturesFromDb() {
+  const formatFeature = new OLFormat();
+  let f;
+  window.lfdb.getItem('drawnFeatures').then((val) => {
+    if (val !== null) {
+      f = formatFeature.readFeatures(val);
+      source.addFeatures(f);
+    }
+  });
 }
 
 function enableBtnFeatureEdit() {
@@ -222,6 +243,10 @@ modify.on(
   },
   this,
 );
+
+modify.on('modifyend', () => {
+  autoSaveFeaturesInDb();
+});
 
 function addDrawInteraction() {
   draw = new OLDraw({
@@ -546,6 +571,14 @@ function setupCtrls(olmap, vectorLayer) {
     enableBtnFeatureEdit(); // check if there is at least one feature to enable button
   });
 
+  source.on('addfeature', () => {
+    autoSaveFeaturesInDb();
+  });
+
+  source.on('removefeature', () => {
+    autoSaveFeaturesInDb();
+  });
+
   const layerSwitcher = new OLLayerSwitcher({
     tipLabel: 'Karten',
     className: 'mdi',
@@ -565,6 +598,8 @@ function setupCtrls(olmap, vectorLayer) {
   map.addInteraction(select);
 
   rightClick();
+
+  getDrawnFeaturesFromDb();
 }
 
 export default {
