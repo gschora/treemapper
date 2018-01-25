@@ -35,10 +35,9 @@
         class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
         >mdi-pine-tree</v-icon>
       </v-layout>
-        <v-icon class="mr-1" v-if="$route.path == '/'">search</v-icon>
         <vue-google-autocomplete
           id="searchAddressTxt"
-          classname="form-control"
+          classname="addressSearch"
           placeholder="Adresse suchen"
           v-on:placechanged="getAddressData"
           v-if="$route.path == '/'"

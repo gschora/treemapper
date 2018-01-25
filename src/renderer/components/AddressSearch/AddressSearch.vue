@@ -3,7 +3,7 @@
         name='searchAddressTxt'
         ref="autocomplete"
         type="text"
-        :class="classname"
+        :class="[classname, show  ? 'show': '']"
         :id="id"
         :placeholder="placeholder"
         v-model="autocompleteText"
@@ -12,7 +12,11 @@
         @change="onChange"
         @keypress="onKeyPress"
         @keyup="onKeyUp"
-        dark
+        prepend-icon="search"
+        :prepend-icon-cb="toggle"
+        clearable
+        hide-details
+        single-line
         ></v-text-field>
 </template>
 
@@ -56,6 +60,7 @@ export default {
        * @type {String}
        */
       autocompleteText: '',
+      show: false,
     };
   },
   watch: {
@@ -137,6 +142,7 @@ export default {
      */
     onBlur() {
       this.$emit('blur');
+      this.show = !this.show;
     },
     /**
      * When the input got changed
@@ -202,7 +208,24 @@ export default {
         }
       }
     },
+    toggle() {
+      if (!this.show) {
+        this.focus();
+      }
+      this.show = !this.show;
+    },
   },
 };
 
 </script>
+
+<style>
+div.addressSearch {
+  max-width: 0%;
+  transition: max-width 1s;
+}
+div.addressSearch.show {
+  max-width: 40%;
+  transition: max-width 1s;
+}
+</style>
