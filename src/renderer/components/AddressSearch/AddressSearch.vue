@@ -222,10 +222,10 @@ export default {
 <style>
 div.addressSearch {
   max-width: 0%;
-  transition: max-width 1s;
+  transition: max-width 0.5s;
 }
 div.addressSearch.show {
   max-width: 40%;
-  transition: max-width 1s;
+  transition: max-width 0.5s;
 }
 </style>

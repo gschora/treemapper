@@ -98,11 +98,6 @@
         window.ad = addressData;
         window.aid = id;
       },
-      getAddressToLocation() {
-        // eslint-disable-next-line no-console
-        console.log('test');
-        document.getElementById('searchAddressTxt').blur();
-      },
     },
   };
   import('vuetify/dist/vuetify.css');
