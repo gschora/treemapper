@@ -99,13 +99,9 @@
         window.aid = id;
       },
       getAddressToLocation() {
-        // const center = window.omap.getView().getCenter();
-        // const t = OLProj.transform([center[0], center[1]], 'EPSG:3857', 'EPSG:4326');
-        // const latlng = {
-        //   lat: t[1],
-        //   lng: t[0],
-        // };
-        // VueGoogleAutocomplete.methods.reverseGeoCode(latlng.lat, latlng.lng);
+        // eslint-disable-next-line no-console
+        console.log('test');
+        document.getElementById('searchAddressTxt').blur();
       },
     },
   };
