@@ -35,7 +35,6 @@
         class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
         >mdi-pine-tree</v-icon>
       </v-layout>
-        <v-icon class="mr-1" v-if="$route.path == '/'">search</v-icon>
         <vue-google-autocomplete
           id="searchAddressTxt"
           classname="form-control"
@@ -100,13 +99,9 @@
         window.aid = id;
       },
       getAddressToLocation() {
-        // const center = window.omap.getView().getCenter();
-        // const t = OLProj.transform([center[0], center[1]], 'EPSG:3857', 'EPSG:4326');
-        // const latlng = {
-        //   lat: t[1],
-        //   lng: t[0],
-        // };
-        // VueGoogleAutocomplete.methods.reverseGeoCode(latlng.lat, latlng.lng);
+        // eslint-disable-next-line no-console
+        console.log('test');
+        document.getElementById('searchAddressTxt').blur();
       },
     },
   };
