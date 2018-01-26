@@ -43,28 +43,11 @@
           v-if="$route.path == '/'"
           >
         </vue-google-autocomplete>
-        <v-speed-dial hover direction="bottom" v-if="$route.path == '/'">
-          <v-btn fab slot="activator" hover>
-            <v-icon>place</v-icon>
-          </v-btn>
-          <v-btn fab dark small color="indigo" @click.native="getAddressToLocation">
-            <v-icon>add</v-icon>
-          </v-btn>
-          <v-btn fab dark small color="red">
-            <v-icon>delete</v-icon>
-          </v-btn>
-        </v-speed-dial>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
               <router-view></router-view>
-          <!-- <v-tooltip right>
-            <v-btn icon large :href="source" target="_blank" slot="activator">
-              <v-icon large>code</v-icon>
-            </v-btn>
-            <span>Source</span>
-          </v-tooltip> -->
         </v-layout>
       </v-container>
     </v-content>
