@@ -21,7 +21,7 @@
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>
+          <v-list-tile-content> 
             <v-list-tile-title>Einstellungen</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -77,36 +77,44 @@
 </template>
 
 <script>
-  import OLProj from 'ol/proj';
-  import VueGoogleAutocomplete from './components/AddressSearch/AddressSearch.vue';
+import OLProj from 'ol/proj';
+import VueGoogleAutocomplete from './components/AddressSearch/AddressSearch.vue';
 
-  export default {
-    name: 'treemapper',
-    data: () => ({
-      drawer: null,
-    }),
-    props: {
-      source: String,
+export default {
+  name: 'treemapper',
+  data: () => ({
+    drawer: null,
+  }),
+  props: {
+    source: String,
+  },
+  components: {
+    VueGoogleAutocomplete,
+  },
+  methods: {
+    getAddressData(addressData, placeResultData, id) {
+      window.omap
+        .getView()
+        .setCenter(
+          OLProj.transform(
+            [addressData.longitude, addressData.latitude],
+            'EPSG:4326',
+            'EPSG:3857',
+          ),
+        );
+      window.omap.getView().setZoom(window.mainSettings.addressZoom);
+      window.ad = addressData;
+      window.aid = id;
     },
-    components: {
-      VueGoogleAutocomplete,
-    },
-    methods: {
-      getAddressData(addressData, placeResultData, id) {
-        window.omap.getView().setCenter(OLProj.transform([addressData.longitude, addressData.latitude], 'EPSG:4326', 'EPSG:3857'));
-        window.omap.getView().setZoom(window.mainSettings.addressZoom);
-        window.ad = addressData;
-        window.aid = id;
-      },
-    },
-  };
-  import('vuetify/dist/vuetify.css');
-  import('mdi/css/materialdesignicons.min.css');
+  },
+};
+import('vuetify/dist/vuetify.css');
+import('mdi/css/materialdesignicons.min.css');
 </script>
 
 <style>
 .list__tile--active .list__tile__action,
-.list__tile--active .list__tile__content{
+.list__tile--active .list__tile__content {
   color: white;
 }
 .pac-container {
@@ -126,7 +134,7 @@
 .pac-matched {
   color: white;
 }
-#christbam-logo{
+#christbam-logo {
   animation: roll 60s linear infinite;
 }
 @keyframes roll {
@@ -134,14 +142,14 @@
     /* transform: rotate(0deg); */
   }
   70% {
-        color: white;
+    color: white;
     /* transform: rotate(360deg); */
   }
-  80%{
-        color: yellow;
+  80% {
+    color: yellow;
   }
-  90%{
-        color: #0099ff;
+  90% {
+    color: #0099ff;
   }
   100% {
     /* transform: rotate(360deg); */
