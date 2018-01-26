@@ -25,8 +25,8 @@ export default {
   },
   data() {
     return {
-      msg: 'null value', //this is for drawer menu???
-      cssAddressTtp: ['tooltip-address'], //change class of tooltip - this will be added to default classes in component
+      msg: 'null value', // this is for drawer menu???
+      cssAddressTtp: ['tooltip-address'], // change class of tooltip - this will be added to default classes in component
     };
   },
   // mounted ist WICHTIG!!!!!! Sonst wird map zu früh gerendert und nicht angezeigt!!!!!!

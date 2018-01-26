@@ -8,25 +8,25 @@
 export default {
   props: {
     ttpLabelid: {
-      //changes label id
+      // changes label id
       type: String,
       default: 'tooltptxt',
     },
     ttpDivid: {
-      //changes outer div id
+      // changes outer div id
       type: String,
       default: 'tooltpdiv',
     },
     cssClass: {
-      //css classes to use
+      // css classes to use
       type: Array,
       default: () => ['tooltip', 'tooltip-static'],
     },
   },
   data() {
     return {
-      show: false, //display:none
-      text: 'tooltiptext', //default text of label
+      show: false, // display:none
+      text: 'tooltiptext', // default text of label
     };
   },
 };
