@@ -1,7 +1,11 @@
 <template>
   <div>
     <div>
-      <address-tooltip :tooltip='tp'></address-tooltip>
+      <address-tooltip
+        ttpLabelid='addressttptxt'
+        ttpDivid='addressttpdiv'
+        :class='cssAddressTtp'> 
+      </address-tooltip>
     </div>
     <div id="mapdiv">
       <!-- <h1>MapPage</h1> -->
@@ -21,8 +25,8 @@ export default {
   },
   data() {
     return {
-      msg: 'null value',
-      tp: { text: 'hallihallo' },
+      msg: 'null value', //this is for drawer menu???
+      cssAddressTtp: ['tooltip-address'], //change class of tooltip - this will be added to default classes in component
     };
   },
   // mounted ist WICHTIG!!!!!! Sonst wird map zu früh gerendert und nicht angezeigt!!!!!!
