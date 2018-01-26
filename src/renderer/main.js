@@ -6,7 +6,6 @@ import Vuetify from 'vuetify';
 // import path from 'path';
 
 import lfdb from 'localforage';
-
 import App from './App';
 import router from './router';
 import store from './store';

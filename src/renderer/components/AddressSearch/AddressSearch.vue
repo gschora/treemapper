@@ -88,10 +88,7 @@ export default {
 
     const ac = document.getElementById(this.id);
     ac.ref = 'autocomplete';
-    this.autocomplete = new google.maps.places.Autocomplete(
-      ac,
-      options,
-    );
+    this.autocomplete = new google.maps.places.Autocomplete(ac, options);
 
     this.autocomplete.addListener('place_changed', () => {
       const place = this.autocomplete.getPlace();
@@ -115,7 +112,8 @@ export default {
         for (let i = 0; i < place.address_components.length; i += 1) {
           const addressType = place.address_components[i].types[0];
           if (addressComponents[addressType]) {
-            const val = place.address_components[i][addressComponents[addressType]];
+            const val =
+              place.address_components[i][addressComponents[addressType]];
             returnData[addressType] = val;
           }
         }
@@ -216,7 +214,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style>
