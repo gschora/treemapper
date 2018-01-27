@@ -142,7 +142,7 @@ function createMeasureTooltip() {
     measureTooltipElement.parentNode.removeChild(measureTooltipElement);
   }
   measureTooltipElement = document.createElement('div');
-  measureTooltipElement.className = 'tooltip tooltip-measure';
+  measureTooltipElement.className = 'mtooltip mtooltip-measure';
   measureTooltip = new OLOverlay({
     element: measureTooltipElement,
     offset: [-50, -25],
@@ -156,7 +156,7 @@ function createAddressTooltip() {
     addressTooltipElement.parentNode.removeChild(addressTooltipElement);
   }
   addressTooltipElement = document.createElement('div');
-  addressTooltipElement.className = 'tooltip tooltip-address';
+  addressTooltipElement.className = 'mtooltip mtooltip-address';
   addressTooltip = new OLOverlay({
     element: addressTooltipElement,
     offset: [2, -5],
@@ -170,7 +170,7 @@ function createHelpTooltip() {
     helpTooltipElement.parentNode.removeChild(helpTooltipElement);
   }
   helpTooltipElement = document.createElement('div');
-  helpTooltipElement.className = 'tooltip hidden';
+  helpTooltipElement.className = 'mtooltip hidden';
   helpTooltip = new OLOverlay({
     element: helpTooltipElement,
     offset: [15, 0],
@@ -207,7 +207,7 @@ select.on(
       }
       measureInfoElement = document.createElement('div');
       measureInfoElement.id = 'mInfoEl';
-      measureInfoElement.className = 'tooltip tooltip-static';
+      measureInfoElement.className = 'mtooltip mtooltip-static';
       measureInfoElement.innerHTML = output;
       measureInfo = new OLOverlay({
         element: measureInfoElement,
@@ -319,7 +319,7 @@ function addDrawInteraction() {
     () => {
       // fid++;
       // evt.feature.setId(fid);
-      measureTooltipElement.className = 'tooltip tooltip-static';
+      measureTooltipElement.className = 'mtooltip mtooltip-static';
       measureTooltip.setOffset([0, -7]);
       // unset sketch
       sketch = null;
