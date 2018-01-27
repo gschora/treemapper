@@ -2,9 +2,10 @@
   <div>
     <div>
       <address-tooltip
-        ttpLabelid='addressttptxt'
-        ttpDivid='addressttpdiv'
-        :class='cssAddressTtp'> 
+        :ttpLabelid='ttpLabelid'
+        :ttpDivid='ttpDivid'
+        :class='cssAddressTtp' 
+        :labeltext='addresslabeltext'>
       </address-tooltip>
     </div>
     <div id="mapdiv">
@@ -15,7 +16,7 @@
 
 <script>
 import mp from './mapPage.js';
-import addressTooltip from './tooltip.vue';
+import addressTooltip from './maptooltip.vue';
 import('ol/ol.css');
 
 export default {
@@ -27,6 +28,9 @@ export default {
     return {
       msg: 'null value', // this is for drawer menu???
       cssAddressTtp: ['tooltip-address'], // change class of tooltip - this will be added to default classes in component
+      ttpLabelid: 'addressttptxt',
+      ttpDivid: 'addressttpdiv',
+      addresslabeltext: 'parentlabel',
     };
   },
   // mounted ist WICHTIG!!!!!! Sonst wird map zu früh gerendert und nicht angezeigt!!!!!!
@@ -101,7 +105,7 @@ export default {
 #mapdiv button:disabled {
   background-color: rgba(0, 0, 0, 0.6);
 }
-.tooltip {
+.mtooltip {
   position: relative;
   background: rgba(255, 153, 0, 0.8);
   border-radius: 4px;
@@ -113,16 +117,16 @@ export default {
 /* span.tooltip{
     visibility: hidden;
   } */
-.tooltip-measure {
+.mtooltip-measure {
   opacity: 1;
   font-weight: bold;
 }
-.tooltip-address {
+.mtooltip-address {
   opacity: 1;
   font-weight: bold;
   text-align: center;
 }
-.tooltip-static {
+.mtooltip-static {
   background-color: rgba(255, 153, 0, 0.8);
   color: white;
   /* border: 1px solid white; */
@@ -130,9 +134,9 @@ export default {
   text-align: center;
   opacity: 1;
 }
-.tooltip-measure:before,
-.tooltip-address:before,
-.tooltip-static:before {
+.mtooltip-measure:before,
+.mtooltip-address:before,
+.mtooltip-static:before {
   border-top: 6px solid rgba(255, 153, 0, 0.8);
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
@@ -142,7 +146,7 @@ export default {
   margin-left: -7px;
   left: 50%;
 }
-.tooltip-static:before {
+.mtooltip-static:before {
   border-top-color: rgba(255, 153, 0, 0.8);
 }
 </style>
