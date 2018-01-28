@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <div>
+  <div style="width: 100%; height: 97%;">
+    <div id="mapdiv">
+      <!-- <h1>MapPage</h1> -->
+    </div>
+    <div >
       <address-tooltip
         :ttpLabelid='ttpLabelid'
         :ttpDivid='ttpDivid'
         :class='cssAddressTtp' 
         :labeltext='addresslabeltext'>
       </address-tooltip>
-    </div>
-    <div id="mapdiv">
-      <!-- <h1>MapPage</h1> -->
-    </div>
+    </div>    
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
 <style>
 #mapdiv {
   width: 100%;
-  height: 97%;
+  height: 100%;
 }
 #mapdiv .layer-switcher .panel {
   background-color: rgba(0, 60, 136, 0.8);
@@ -112,7 +112,8 @@ export default {
   color: white;
   padding: 4px 8px;
   opacity: 0.7;
-  white-space: nowrap;
+  max-width: 170px;
+  /* white-space: nowrap; */
 }
 /* span.tooltip{
     visibility: hidden;
@@ -125,6 +126,10 @@ export default {
   opacity: 1;
   font-weight: bold;
   text-align: center;
+}
+#addressttptxt {
+  width: 50px;
+  word-break: break-word;
 }
 .mtooltip-static {
   background-color: rgba(255, 153, 0, 0.8);

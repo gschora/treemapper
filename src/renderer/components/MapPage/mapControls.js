@@ -152,17 +152,14 @@ function createMeasureTooltip() {
 }
 
 function createAddressTooltip() {
-  if (addressTooltipElement) {
-    addressTooltipElement.parentNode.removeChild(addressTooltipElement);
-  }
-  addressTooltipElement = document.createElement('div');
-  addressTooltipElement.className = 'mtooltip mtooltip-address';
+  addressTooltipElement = document.getElementById('addressttpdiv');
   addressTooltip = new OLOverlay({
     element: addressTooltipElement,
     offset: [2, -5],
     positioning: 'bottom-center',
   });
   map.addOverlay(addressTooltip);
+  window.e = addressTooltip;
 }
 
 function createHelpTooltip() {
@@ -528,11 +525,9 @@ function reverseGeoCode(latlng) {
   geocoder.geocode({ location: latlng }, (results, status) => {
     if (status === 'OK') {
       if (results.length > 0) {
-        // map
-        // .getView()
-        // .setCenter(OLProj.transform([latlng.lng, latlng.lat], 'EPSG:4326', 'EPSG:3857'));
-        createAddressTooltip();
-        addressTooltipElement.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
+        // createAddressTooltip();
+        const lbltxt = document.getElementById('addressttptxt');
+        lbltxt.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
           6,
         )} ${latlng.lng.toFixed(6)}`;
         addressTooltip.setPosition(
@@ -553,17 +548,15 @@ function rightClick() {
     // contextmenu is right-click
     e.preventDefault();
 
-    if (addressTooltipElement && addressTooltipElement.innerHTML !== '') {
-      createAddressTooltip();
-    } else {
+    if (addressTooltip.getPosition() === undefined) {
       const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
       const latlng = { lat: coor[1], lng: coor[0] };
       reverseGeoCode(latlng);
+    } else {
+      addressTooltip.setPosition(undefined);
     }
 
-    // eslint-disable-next-line no-console
-    // console.log(coor);
-    window.e = addressTooltipElement;
+    window.e = addressTooltip;
   });
 }
 
@@ -598,6 +591,8 @@ function setupCtrls(olmap, vectorLayer) {
   olmap.addControl(new FeatureDeleteControl());
   enableBtnFeatureEdit();
   map.addInteraction(select);
+
+  createAddressTooltip();
 
   rightClick();
 
