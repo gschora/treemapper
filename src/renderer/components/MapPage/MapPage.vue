@@ -8,8 +8,13 @@
         :ttpLabelid='ttpLabelid'
         :ttpDivid='ttpDivid'
         :class='cssAddressTtp' 
-        :labeltext='addresslabeltext'>
+        :labeltext='addresslabeltext'
+        @saveHome='saveHome'
+        >
       </address-tooltip>
+
+        <v-icon id="homeIcon" small color="blue">mdi-home-map-marker</v-icon>
+
     </div>    
   </div>
 </template>
@@ -38,6 +43,11 @@ export default {
     this.$nextTick(() => {
       mp.initMap();
     });
+  },
+  methods: {
+    saveHome: () => {
+      mp.getAddressTooltipCoords();
+    },
   },
 };
 </script>

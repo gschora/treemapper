@@ -3,6 +3,7 @@ import OLView from 'ol/view';
 import OLCollection from 'ol/collection';
 import OLGroup from 'ol/layer/group';
 import OLControl from 'ol/control';
+// import OLProj from 'ol/proj';
 import mpl from './mapLayers';
 import mpc from './mapControls';
 
@@ -17,12 +18,8 @@ const overlaylayers = new OLGroup({
   layers: new OLCollection(),
 });
 
-function readDb() {}
-
 export default {
   initMap: () => {
-    readDb();
-
     let veclayer;
     let center;
 
@@ -37,6 +34,12 @@ export default {
     // console.log(omap);
     veclayer.setZIndex(10);
 
+    // let zlev = window.mainSettings.defaultZoom;
+
+    // if(window.mainSettings.currentZoom !== zlev){
+    //   zlev = window.mainSettings.currentZoom;
+    // }
+
     omap = new OLMap({
       layers: [overlaylayers, baselayers],
       target: 'mapdiv',
@@ -45,7 +48,7 @@ export default {
       }),
       view: new OLView({
         center,
-        zoom: window.mainSettings.defaultZoom,
+        zoom: window.mainSettings.currentZoom,
         projection: 'EPSG:3857',
       }),
     });
@@ -60,9 +63,19 @@ export default {
     // sets zoom level to stay same when switching to settings page
     omap.getView().on('change:resolution', (ev) => {
       const zl = Math.round(ev.target.getZoom());
-      if (zl !== window.mainSettings.defaultZoom) {
-        window.mainSettings.defaultZoom = zl;
+      if (zl !== window.mainSettings.currentZoom) {
+        window.mainSettings.currentZoom = zl;
       }
     });
+  },
+  getAddressTooltipCoords() {
+    const ovc = omap.getOverlayById('addressTooltipOverlayId').getPosition();
+    // const coor = OLProj.transform(ovc, 'EPSG:3857', 'EPSG:4326');
+    // const latlng = { lat: coor[1], lng: coor[0] };
+    window.mainSettings.homeCoords = ovc;
+    // eslint-disable-next-line no-console
+    // console.log(ovc);
+    window.lfdb.setItem('mainSettings', window.mainSettings).catch(() => {});
+    mpc.createHomeOverlay();
   },
 };

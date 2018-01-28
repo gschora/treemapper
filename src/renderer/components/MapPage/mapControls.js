@@ -35,6 +35,8 @@ let measureTooltipElement;
 let measureTooltip;
 let measureInfoElement;
 let measureInfo;
+let homeIconElement;
+let homeIconOverlay;
 let elBtnFeatureDel;
 let elBtnFeatureEdit;
 // var continuePolygonMsg = 'Click to continue drawing the polygon';
@@ -105,6 +107,20 @@ function delFeature() {
   elBtnFeatureDel.removeEventListener('touchstart', delFeature, false);
 }
 
+function createHomeOverlay() {
+  if (window.omap === undefined) {
+    homeIconElement = document.getElementById('homeIcon');
+    homeIconOverlay = new OLOverlay({
+      id: 'homeIconOverlayId',
+      element: homeIconElement,
+      // offset: [2, -5],
+      positioning: 'center-center',
+    });
+    map.addOverlay(homeIconOverlay);
+  }
+  homeIconOverlay.setPosition(window.mainSettings.homeCoords);
+}
+
 function autoSaveFeaturesInDb() {
   const formatFeature = new OLFormat();
   const fs = [];
@@ -126,6 +142,7 @@ function getDrawnFeaturesFromDb() {
       });
       source.on('addfeature', autoSaveFeaturesInDb);
     }
+    createHomeOverlay();
   });
 }
 
@@ -154,6 +171,7 @@ function createMeasureTooltip() {
 function createAddressTooltip() {
   addressTooltipElement = document.getElementById('addressttpdiv');
   addressTooltip = new OLOverlay({
+    id: 'addressTooltipOverlayId',
     element: addressTooltipElement,
     offset: [2, -5],
     positioning: 'bottom-center',
@@ -597,8 +615,10 @@ function setupCtrls(olmap, vectorLayer) {
   rightClick();
 
   getDrawnFeaturesFromDb();
+  createHomeOverlay();
 }
 
 export default {
   setupCtrls,
+  createHomeOverlay,
 };

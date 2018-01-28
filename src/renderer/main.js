@@ -27,6 +27,7 @@ new Vue({
 window.mainSettings = {
   _id: 'mainSettings',
   defaultZoom: 8,
+  currentZoom: 8,
   addressZoom: 17,
   homeCoords: [1765230, 5993680],
   startMap: 'Openstreetmap',
@@ -44,5 +45,6 @@ lfdb.getItem('mainSettings').then((val) => {
     window.mainSettings = val;
     window.omap.getView().setZoom(val.defaultZoom);
     window.omap.getView().setCenter(val.homeCoords);
+    window.omap.getOverlayById('homeIconOverlayId').setPosition(window.mainSettings.homeCoords);
   }
 });
