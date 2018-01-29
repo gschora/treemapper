@@ -43,6 +43,9 @@
           v-if="$route.path == '/'"
           >
         </vue-google-autocomplete>
+        <v-btn id="zoomtohomebtn" fab @click.stop="zoomToHome">
+          <v-icon>mdi-home-map-marker</v-icon>
+        </v-btn>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
@@ -88,6 +91,10 @@ export default {
       window.omap.getView().setZoom(window.mainSettings.addressZoom);
       window.ad = addressData;
       window.aid = id;
+    },
+    zoomToHome: () => {
+      window.omap.getView().setCenter(window.mainSettings.homeCoords);
+      window.omap.getView().setZoom(window.mainSettings.addressZoom);
     },
   },
 };

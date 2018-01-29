@@ -10,6 +10,7 @@ treemapper:
     ☐ add switch features button to switch through the features list
         or
     ☐ select field and zoom button
+    ☐ notification when home is set
 
 bugs:
     ✔ wrong position of home icon after program restart @critical @done (29.1.2018, 02:14:25)
