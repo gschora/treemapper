@@ -218,8 +218,9 @@ export default {
 
 <style>
 div.addressSearch {
-  max-width: 0%;
+  max-width: 3%;
   transition: max-width 0.5s;
+  margin: 3px;
 }
 div.addressSearch.show {
   max-width: 40%;

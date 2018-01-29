@@ -43,6 +43,17 @@
           v-if="$route.path == '/'"
           >
         </vue-google-autocomplete>
+        <v-select
+          id="placesselect"
+          :class="placesShow ? 'placesShow':''"
+          hide-details
+          single-line
+          prepend-icon="place"
+          :prepend-icon-cb="toggle"
+          item-value="text"
+          placeholder="gespeicherte Orte"
+          @blur="onBlurPlaces">
+        </v-select>
         <v-btn id="zoomtohomebtn" fab @click.stop="zoomToHome">
           <v-icon>mdi-home-map-marker</v-icon>
         </v-btn>
@@ -70,6 +81,7 @@ export default {
   name: 'treemapper',
   data: () => ({
     drawer: null,
+    placesShow: false,
   }),
   props: {
     source: String,
@@ -99,6 +111,23 @@ export default {
         duration: 1000,
       });
     },
+    toggle() {
+      if (!this.placesShow) {
+        // this.focus();
+      }
+      this.placesShow = !this.placesShow;
+    },
+    onFocusPlaces() {
+      // eslint-disable-next-line no-console
+      console.log('focus');
+    },
+    /**
+     * When the input loses focus
+     */
+    onBlurPlaces() {
+      this.$emit('blur');
+      this.placesShow = false;
+    },
   },
 };
 import('vuetify/dist/vuetify.css');
@@ -127,12 +156,30 @@ import('mdi/css/materialdesignicons.min.css');
 .pac-matched {
   color: white;
 }
+div#placesselect {
+  max-width: 3%;
+  transition: max-width 0.5s;
+}
+#placesselect.placesShow {
+  max-width: 100%;
+  transition: max-width 0.5s;
+}
+#placesselect i.input-group__append-icon {
+  display: none;
+}
+#placesselect.placesShow i.input-group__append-icon {
+  display: inherit;
+}
 #christbam-logo {
   animation: roll 60s linear infinite;
 }
 @keyframes roll {
   0% {
+    color: green;
     /* transform: rotate(0deg); */
+  }
+  60% {
+    color: green;
   }
   70% {
     color: white;
@@ -145,7 +192,7 @@ import('mdi/css/materialdesignicons.min.css');
     color: #0099ff;
   }
   100% {
-    /* transform: rotate(360deg); */
+    color: green;
   }
 }
 </style>

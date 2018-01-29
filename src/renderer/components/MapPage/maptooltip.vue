@@ -12,7 +12,7 @@
           </v-tooltip>
           <v-tooltip bottom>
             <v-btn fab small color='light-blue darken-4' slot="activator">
-              <v-icon dark>add</v-icon>
+              <v-icon dark>add_location</v-icon>
             </v-btn>
             <label>Adresse speichern</label>
           </v-tooltip>
