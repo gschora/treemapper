@@ -108,8 +108,11 @@ function delFeature() {
 }
 
 function createHomeOverlay() {
-  if (window.omap === undefined) {
-    homeIconElement = document.getElementById('homeIcon');
+  homeIconElement = document.getElementById('homeIcon');
+
+  // eslint-disable-next-line no-console
+  console.log(homeIconElement);
+  if (homeIconOverlay === undefined) {
     homeIconOverlay = new OLOverlay({
       id: 'homeIconOverlayId',
       element: homeIconElement,
@@ -118,6 +121,10 @@ function createHomeOverlay() {
     });
     map.addOverlay(homeIconOverlay);
   }
+  if (map.getOverlayById('homeIconOverlayId') === null) {
+    map.addOverlay(homeIconOverlay);
+  }
+  window.o = homeIconOverlay;
   homeIconOverlay.setPosition(window.mainSettings.homeCoords);
 }
 
@@ -131,19 +138,22 @@ function autoSaveFeaturesInDb() {
 }
 
 function getDrawnFeaturesFromDb() {
-  const formatFeature = new OLFormat();
+  if (window.loadedFeatures === undefined) {
+    const formatFeature = new OLFormat();
 
-  window.lfdb.getItem('drawnFeatures').then((val) => {
-    if (val !== null) {
-      // disable eventlistener, otherwise the features added will added in db
-      source.un('addfeature', autoSaveFeaturesInDb);
-      val.forEach((item) => {
-        source.addFeature(formatFeature.readFeature(item));
-      });
-      source.on('addfeature', autoSaveFeaturesInDb);
-    }
-    createHomeOverlay();
-  });
+    window.lfdb.getItem('drawnFeatures').then((val) => {
+      if (val !== null) {
+        // disable eventlistener, otherwise the features added will added in db
+        source.un('addfeature', autoSaveFeaturesInDb);
+        val.forEach((item) => {
+          source.addFeature(formatFeature.readFeature(item));
+        });
+        source.on('addfeature', autoSaveFeaturesInDb);
+        window.loadedFeatures = true;
+      }
+    });
+  }
+  createHomeOverlay();
 }
 
 function enableBtnFeatureEdit() {
@@ -615,7 +625,6 @@ function setupCtrls(olmap, vectorLayer) {
   rightClick();
 
   getDrawnFeaturesFromDb();
-  createHomeOverlay();
 }
 
 export default {

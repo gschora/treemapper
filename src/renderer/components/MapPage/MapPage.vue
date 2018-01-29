@@ -12,9 +12,9 @@
         @saveHome='saveHome'
         >
       </address-tooltip>
-
+      <div style="display:none">
         <v-icon id="homeIcon" small color="blue">mdi-home-map-marker</v-icon>
-
+      </div>
     </div>    
   </div>
 </template>

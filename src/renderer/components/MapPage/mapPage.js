@@ -30,15 +30,8 @@ export default {
       veclayer = window.veclayer;
       center = omap.getView().getCenter();
     }
-    // // eslint-disable-next-line no-console
-    // console.log(omap);
+
     veclayer.setZIndex(10);
-
-    // let zlev = window.mainSettings.defaultZoom;
-
-    // if(window.mainSettings.currentZoom !== zlev){
-    //   zlev = window.mainSettings.currentZoom;
-    // }
 
     omap = new OLMap({
       layers: [overlaylayers, baselayers],
@@ -55,6 +48,7 @@ export default {
     mpc.setupCtrls(omap, veclayer);
     window.omap = omap;
     window.veclayer = veclayer;
+
     // fix for distorted map on start
     setTimeout(() => {
       omap.updateSize();
@@ -70,12 +64,20 @@ export default {
   },
   getAddressTooltipCoords() {
     const ovc = omap.getOverlayById('addressTooltipOverlayId').getPosition();
-    // const coor = OLProj.transform(ovc, 'EPSG:3857', 'EPSG:4326');
-    // const latlng = { lat: coor[1], lng: coor[0] };
+    omap.getOverlayById('addressTooltipOverlayId').setPosition(undefined); // disable tooltip
+
     window.mainSettings.homeCoords = ovc;
+    window.lfdb.getItem('mainSettings').then((val) => {
+      if (val !== null) {
+        val.homeCoords = ovc;
+        window.lfdb.setItem('mainSettings', val).catch(() => {});
+        // eslint-disable-next-line no-console
+        // console.log(val);
+      }
+    });
     // eslint-disable-next-line no-console
     // console.log(ovc);
-    window.lfdb.setItem('mainSettings', window.mainSettings).catch(() => {});
+    // window.lfdb.setItem('mainSettings', window.mainSettings).catch(() => {});
     mpc.createHomeOverlay();
   },
 };

@@ -1,6 +1,18 @@
 treemapper:
+    ctrl-enter  - new task
+    alt-d - finish task
 
-    ☐ set home Position @critical 
+    ✔ set home Position @critical @done (29.1.2018, 01:55:23)
     ☐ export/load file with features
     ☐ export and load db
-    ☐ 
+    ☐ add zoom-to-home button near search address field
+    ☐ add safed locations select field
+    ☐ add switch features button to switch through the features list
+        or
+    ☐ select field and zoom button
+
+bugs:
+    ✔ wrong position of home icon after program restart @critical @done (29.1.2018, 02:14:25)
+    ✔ when setting home position, overlays are added to map overlays and old ones not deleted check with window.omap.getOverlays().getArray().length @done (29.1.2018, 03:19:01)
+    ✔ home overlay disapears after switching to settings page and back @done (29.1.2018, 03:18:57)
+    ✔ home icon is in left bottom corner after switching to settings page @done (29.1.2018, 03:53:35)
