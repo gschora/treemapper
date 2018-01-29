@@ -93,8 +93,11 @@ export default {
       window.aid = id;
     },
     zoomToHome: () => {
-      window.omap.getView().setCenter(window.mainSettings.homeCoords);
-      window.omap.getView().setZoom(window.mainSettings.addressZoom);
+      window.omap.getView().animate({
+        center: window.mainSettings.homeCoords,
+        zoom: window.mainSettings.addressZoom,
+        duration: 1000,
+      });
     },
   },
 };
