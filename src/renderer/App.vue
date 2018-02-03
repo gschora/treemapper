@@ -55,9 +55,9 @@
           placeholder="gespeicherte Orte"
           @blur="onBlurPlaces">
         </v-select>
-        <v-btn id="zoomtohomebtn" fab @click.stop="zoomToHome">
-          <v-icon>mdi-home-map-marker</v-icon>
-        </v-btn>
+        <!-- <v-btn id="zoomtohomebtn" fab @click.stop="zoomToHome"> -->
+          <v-icon id="zoomtohomebtn" @click.stop="zoomToHome">mdi-home-map-marker</v-icon>
+        <!-- </v-btn> -->
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
@@ -83,7 +83,7 @@ export default {
   data: () => ({
     drawer: null,
     placesShow: false,
-    savedPlaces: window.savedPlaces,
+    savedPlaces: window.treemapper.savedPlaces,
   }),
   props: {
     source: String,
@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     getAddressData(addressData, placeResultData, id) {
-      window.omap
+      window.treemapper.omap
         .getView()
         .setCenter(
           OLProj.transform(
@@ -102,14 +102,16 @@ export default {
             'EPSG:3857',
           ),
         );
-      window.omap.getView().setZoom(window.mainSettings.addressZoom);
-      window.ad = addressData;
-      window.aid = id;
+      window.treemapper.omap
+        .getView()
+        .setZoom(window.treemapper.mainSettings.addressZoom);
+      window.treemapper.ad = addressData;
+      window.treemapper.aid = id;
     },
     zoomToHome: () => {
-      window.omap.getView().animate({
-        center: window.mainSettings.homeCoords,
-        zoom: window.mainSettings.addressZoom,
+      window.treemapper.omap.getView().animate({
+        center: window.treemapper.mainSettings.homeCoords,
+        zoom: window.treemapper.mainSettings.addressZoom,
         duration: 1000,
       });
     },
@@ -159,7 +161,8 @@ import('mdi/css/materialdesignicons.min.css');
   color: white;
 }
 div#placesselect {
-  max-width: 3%;
+  max-width: 0%;
+  margin-right: 1em;
   transition: max-width 0.5s;
 }
 #placesselect.placesShow {
@@ -171,6 +174,12 @@ div#placesselect {
 }
 #placesselect.placesShow i.input-group__append-icon {
   display: inherit;
+}
+#zoomtohomebtn {
+  color: rgba(255, 255, 255, 0.7);
+}
+#zoomtohomebtn:hover {
+  color: rgba(255, 255, 255, 1);
 }
 #christbam-logo {
   animation: roll 60s linear infinite;

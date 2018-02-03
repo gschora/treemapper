@@ -141,6 +141,7 @@ export default {
     onBlur() {
       this.$emit('blur');
       this.show = !this.show;
+      // this.show = true;
     },
     /**
      * When the input got changed
@@ -218,12 +219,19 @@ export default {
 
 <style>
 div.addressSearch {
-  max-width: 3%;
+  max-width: 0%;
   transition: max-width 0.5s;
-  margin: 3px;
+  margin-right: 1em;
 }
 div.addressSearch.show {
   max-width: 40%;
   transition: max-width 0.5s;
+}
+
+div.addressSearch.show .input-group__icon-clearable {
+  display: inherit;
+}
+div.addressSearch .input-group__icon-clearable {
+  display: none;
 }
 </style>

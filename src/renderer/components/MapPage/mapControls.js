@@ -122,8 +122,8 @@ function createHomeOverlay() {
   if (map.getOverlayById('homeIconOverlayId') === null) {
     map.addOverlay(homeIconOverlay);
   }
-  window.o = homeIconOverlay;
-  homeIconOverlay.setPosition(window.mainSettings.homeCoords);
+  window.treemapper.o = homeIconOverlay;
+  homeIconOverlay.setPosition(window.treemapper.mainSettings.homeCoords);
 }
 
 function autoSaveFeaturesInDb() {
@@ -132,14 +132,14 @@ function autoSaveFeaturesInDb() {
   source.getFeatures().forEach((feat) => {
     fs.push(formatFeature.writeFeature(feat));
   });
-  window.lfdb.setItem('drawnFeatures', fs).catch(() => {});
+  window.treemapper.lfdb.setItem('drawnFeatures', fs).catch(() => {});
 }
 
 function getDrawnFeaturesFromDb() {
-  if (window.loadedFeatures === undefined) {
+  if (window.treemapper.loadedFeatures === undefined) {
     const formatFeature = new OLFormat();
 
-    window.lfdb.getItem('drawnFeatures').then((val) => {
+    window.treemapper.lfdb.getItem('drawnFeatures').then((val) => {
       if (val !== null) {
         // disable eventlistener, otherwise the features added will added in db
         source.un('addfeature', autoSaveFeaturesInDb);
@@ -147,7 +147,7 @@ function getDrawnFeaturesFromDb() {
           source.addFeature(formatFeature.readFeature(item));
         });
         source.on('addfeature', autoSaveFeaturesInDb);
-        window.loadedFeatures = true;
+        window.treemapper.loadedFeatures = true;
       }
     });
   }
@@ -185,7 +185,7 @@ function createAddressTooltip() {
     positioning: 'bottom-center',
   });
   map.addOverlay(addressTooltip);
-  window.e = addressTooltip;
+  window.treemapper.e = addressTooltip;
 }
 
 function createHelpTooltip() {
@@ -551,7 +551,7 @@ function reverseGeoCode(latlng) {
   geocoder.geocode({ location: latlng }, (results, status) => {
     if (status === 'OK') {
       if (results.length > 0) {
-        window.r = results[0];
+        window.treemapper.r = results[0];
         const lbltxt = document.getElementById('addressttptxt');
         lbltxt.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
           6,
@@ -564,7 +564,7 @@ function reverseGeoCode(latlng) {
         console.error('No location results found');
       }
     } else {
-      // window.alert('Geocoder failed due to: ' + status);
+      // window.treemapper.alert('Geocoder failed due to: ' + status);
     }
   });
 }
@@ -605,16 +605,16 @@ function getAddressObject(latlng3857) {
           });
         });
 
-        if (window.savedPlaces === undefined) {
-          window.savedPlaces = [];
+        if (window.treemapper.savedPlaces === undefined) {
+          window.treemapper.savedPlaces = [];
         }
-        window.savedPlaces.push(addressObject);
+        window.treemapper.savedPlaces.push(addressObject);
       } else {
         // eslint-disable-next-line no-console
         console.error('No location results found');
       }
     } else {
-      // window.alert('Geocoder failed due to: ' + status);
+      // window.treemapper.alert('Geocoder failed due to: ' + status);
     }
   });
 }
@@ -632,7 +632,7 @@ function rightClick() {
       addressTooltip.setPosition(undefined);
     }
 
-    window.e = addressTooltip;
+    window.treemapper.e = addressTooltip;
   });
 }
 

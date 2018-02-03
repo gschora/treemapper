@@ -16,6 +16,12 @@ Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
 
+if (window.treemapper === undefined) {
+  window.treemapper = {};
+}
+
+window.treemapper.savedPlaces = [];
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },
@@ -24,7 +30,7 @@ new Vue({
   template: '<App/>',
 }).$mount('#app');
 
-window.mainSettings = {
+window.treemapper.mainSettings = {
   _id: 'mainSettings',
   defaultZoom: 8,
   currentZoom: 8,
@@ -33,18 +39,33 @@ window.mainSettings = {
   startMap: 'Openstreetmap',
 };
 
-window.lfdb = lfdb;
+window.treemapper.lfdb = lfdb;
 
 lfdb.getItem('mainSettings').then((val) => {
   if (val === null) {
-    lfdb.setItem('mainSettings', window.mainSettings).then(() => {
+    lfdb.setItem('mainSettings', window.treemapper.mainSettings).then(() => {
       // eslint-disable-next-line no-console
       // console.log(value);
     });
   } else {
-    window.mainSettings = val;
-    window.omap.getView().setZoom(val.defaultZoom);
-    window.omap.getView().setCenter(val.homeCoords);
-    window.omap.getOverlayById('homeIconOverlayId').setPosition(window.mainSettings.homeCoords);
+    window.treemapper.mainSettings = val;
+    window.treemapper.omap.getView().setZoom(val.defaultZoom);
+    window.treemapper.omap.getView().setCenter(val.homeCoords);
+    window.treemapper.omap
+      .getOverlayById('homeIconOverlayId')
+      .setPosition(window.treemapper.mainSettings.homeCoords);
+  }
+});
+
+lfdb.getItem('savedPlaces').then((val) => {
+  if (val === null) {
+    lfdb.setItem('savedPlaces', window.treemapper.savedPlaces).then(() => {
+      // eslint-disable-next-line no-console
+      // console.log(value);
+    });
+  } else {
+    window.treemapper.savedPlaces = val;
+    // // eslint-disable-next-line no-console
+    // console.log(val);
   }
 });
