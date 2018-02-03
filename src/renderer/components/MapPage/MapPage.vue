@@ -9,13 +9,40 @@
         :ttpDivid='ttpDivid'
         :class='cssAddressTtp' 
         :labeltext='addresslabeltext'
-        @saveHome='saveHome'
+        @btnClick1='saveHome'
+        @btnClick2='saveLocDialog = true'
         >
       </address-tooltip>
       <div style="display:none">
         <v-icon id="homeIcon" small color="blue">mdi-home-map-marker</v-icon>
       </div>
-    </div>    
+      <!-- <v-container d-block>
+        <v-layout>-->
+          <!-- <v-flex>  -->
+
+          <!-- </v-flex> -->
+  <!--      </v-layout>
+      </v-container> -->
+    </div>
+                <v-dialog v-model="saveLocDialog" max-width="40%">
+              <v-card >
+                <v-card-title primary-title>
+                  <h3>Name des Ortes</h3>
+                </v-card-title>
+                  <v-card-text>
+                  <v-text-field
+                    name="input-1"
+                    id="testing"
+                    :placeholder="addresslabeltext"
+                  >
+                  </v-text-field>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="primary" flat @click.stop="saveLocation">Speichern</v-btn>
+                  <v-btn color="primary" flat @click.stop="saveLocDialog=false">Abbrechen</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>    
   </div>
 </template>
 
@@ -36,6 +63,7 @@ export default {
       ttpLabelid: 'addressttptxt',
       ttpDivid: 'addressttpdiv',
       addresslabeltext: 'parentlabel',
+      saveLocDialog: false,
     };
   },
   // mounted ist WICHTIG!!!!!! Sonst wird map zu früh gerendert und nicht angezeigt!!!!!!
@@ -47,6 +75,11 @@ export default {
   methods: {
     saveHome: () => {
       mp.getAddressTooltipCoords();
+    },
+    saveLocation: () => {
+      // mp.getSaveLocationCoords();
+      // eslint-disable-next-line no-console
+      console.log('save_location');
     },
   },
 };

@@ -5,13 +5,13 @@
         </div>
         <div>
           <v-tooltip bottom>
-            <v-btn fab small color='teal darken-3' slot="activator" @click="$emit('saveHome')">
+            <v-btn fab small color='teal darken-3' slot="activator" @click="$emit('btnClick1')">
               <v-icon dark>mdi-home-map-marker</v-icon>
             </v-btn>
             <label>als Heimatpunkt speichern</label>
           </v-tooltip>
           <v-tooltip bottom>
-            <v-btn fab small color='light-blue darken-4' slot="activator">
+            <v-btn fab small color='light-blue darken-4' slot="activator" @click="$emit('btnClick2')">
               <v-icon dark>add_location</v-icon>
             </v-btn>
             <label>Adresse speichern</label>

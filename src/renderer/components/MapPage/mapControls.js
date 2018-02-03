@@ -110,8 +110,6 @@ function delFeature() {
 function createHomeOverlay() {
   homeIconElement = document.getElementById('homeIcon');
 
-  // eslint-disable-next-line no-console
-  console.log(homeIconElement);
   if (homeIconOverlay === undefined) {
     homeIconOverlay = new OLOverlay({
       id: 'homeIconOverlayId',
@@ -553,7 +551,7 @@ function reverseGeoCode(latlng) {
   geocoder.geocode({ location: latlng }, (results, status) => {
     if (status === 'OK') {
       if (results.length > 0) {
-        // createAddressTooltip();
+        window.r = results[0];
         const lbltxt = document.getElementById('addressttptxt');
         lbltxt.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
           6,
@@ -561,6 +559,56 @@ function reverseGeoCode(latlng) {
         addressTooltip.setPosition(
           OLProj.transform([latlng.lng, latlng.lat], 'EPSG:4326', 'EPSG:3857'),
         );
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('No location results found');
+      }
+    } else {
+      // window.alert('Geocoder failed due to: ' + status);
+    }
+  });
+}
+
+function getAddressObject(latlng3857) {
+  /* global google */
+  const geocoder = new google.maps.Geocoder();
+
+  const coor = OLProj.transform(latlng3857, 'EPSG:3857', 'EPSG:4326');
+  const latlng = { lat: coor[1], lng: coor[0] };
+
+  const addressObject = {
+    text: '',
+    value: latlng3857,
+    streetNr: '',
+    streetName: '',
+    country: '',
+    postalCode: '',
+    latlng,
+    latlng3857,
+  };
+
+  geocoder.geocode({ location: latlng }, (results, status) => {
+    if (status === 'OK') {
+      if (results.length > 0) {
+        const rac = results[0].address_components;
+        rac.forEach((item) => {
+          item.types.forEach((ty) => {
+            if (ty === 'street_number') {
+              addressObject.streetNr = item.long_name;
+            } else if (ty === 'route') {
+              addressObject.streetName = item.long_name;
+            } else if (ty === 'country') {
+              addressObject.country = item.long_name;
+            } else if (ty === 'postal_code') {
+              addressObject.postalCode = item.long_name;
+            }
+          });
+        });
+
+        if (window.savedPlaces === undefined) {
+          window.savedPlaces = [];
+        }
+        window.savedPlaces.push(addressObject);
       } else {
         // eslint-disable-next-line no-console
         console.error('No location results found');
@@ -630,4 +678,5 @@ function setupCtrls(olmap, vectorLayer) {
 export default {
   setupCtrls,
   createHomeOverlay,
+  getAddressObject,
 };

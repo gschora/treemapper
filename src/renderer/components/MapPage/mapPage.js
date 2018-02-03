@@ -80,4 +80,10 @@ export default {
     // window.lfdb.setItem('mainSettings', window.mainSettings).catch(() => {});
     mpc.createHomeOverlay();
   },
+  getSaveLocationCoords() {
+    const ovc = omap.getOverlayById('addressTooltipOverlayId').getPosition();
+    omap.getOverlayById('addressTooltipOverlayId').setPosition(undefined); // disable tooltip
+
+    mpc.getAddressObject(ovc);
+  },
 };

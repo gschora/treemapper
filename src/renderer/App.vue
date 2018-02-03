@@ -46,6 +46,7 @@
         <v-select
           id="placesselect"
           :class="placesShow ? 'placesShow':''"
+          :items="savedPlaces"
           hide-details
           single-line
           prepend-icon="place"
@@ -82,6 +83,7 @@ export default {
   data: () => ({
     drawer: null,
     placesShow: false,
+    savedPlaces: window.savedPlaces,
   }),
   props: {
     source: String,
