@@ -604,11 +604,17 @@ function getAddressObject(latlng3857) {
             }
           });
         });
-
         if (window.treemapper.savedPlaces === undefined) {
           window.treemapper.savedPlaces = [];
         }
+
+        addressObject.text = `${addressObject.streetName} ${addressObject.streetNr}, ${
+          addressObject.postalCode
+        }`;
+
         window.treemapper.savedPlaces.push(addressObject);
+        // eslint-disable-next-line no-console
+        console.log(addressObject);
       } else {
         // eslint-disable-next-line no-console
         console.error('No location results found');
@@ -628,6 +634,7 @@ function rightClick() {
       const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
       const latlng = { lat: coor[1], lng: coor[0] };
       reverseGeoCode(latlng);
+      getAddressObject(map.getEventCoordinate(e));
     } else {
       addressTooltip.setPosition(undefined);
     }
