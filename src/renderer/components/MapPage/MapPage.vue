@@ -35,7 +35,14 @@
           <v-btn color="primary" flat @click.stop="saveLocDialog=false">Abbrechen</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>    
+    </v-dialog>   
+    <v-snackbar
+      :color="snackcolor"
+      v-model="snackbar"
+    >
+      <label>{{snacktext}}</label>
+      <v-icon id="homeIcon" small color="white">{{snackicon}}</v-icon>
+    </v-snackbar> 
   </div>
 </template>
 
@@ -49,6 +56,7 @@ export default {
   components: {
     addressTooltip,
   },
+  props: {},
   data() {
     return {
       msg: 'null value', // this is for drawer menu???
@@ -57,6 +65,10 @@ export default {
       ttpDivid: 'addressttpdiv',
       addresslabeltext: 'parentlabel',
       saveLocDialog: false,
+      snacktext: 'test this',
+      snackbar: false,
+      snackicon: '',
+      snackcolor: '',
     };
   },
   // mounted ist WICHTIG!!!!!! Sonst wird map zu früh gerendert und nicht angezeigt!!!!!!
@@ -66,8 +78,13 @@ export default {
     });
   },
   methods: {
-    saveHome: () => {
+    saveHome() {
+      // ACHTUNG: hier keine arrow-fn verwenden sonst passt das "this" nicht!!!!!!
       mp.getAddressTooltipCoords();
+      this.snacktext = 'Heimatpunkt gespeichert';
+      this.snackicon = 'done';
+      this.snackcolor = 'success';
+      this.snackbar = true;
     },
     saveLocation: () => {
       // mp.getSaveLocationCoords();
