@@ -35,29 +35,7 @@
         class="btn btn--floating btn--outline btn--small btn--depressed green--text text--darken-1"
         >mdi-pine-tree</v-icon>
       </v-layout>
-        <vue-google-autocomplete
-          id="searchAddressTxt"
-          classname="addressSearch"
-          placeholder="Adresse suchen"
-          v-on:placechanged="getAddressData"
-          v-if="$route.path == '/'"
-          >
-        </vue-google-autocomplete>
-        <v-select
-          id="placesselect"
-          :class="placesShow ? 'placesShow':''"
-          :items="savedPlaces"
-          hide-details
-          single-line
-          prepend-icon="place"
-          :prepend-icon-cb="toggle"
-          item-value="text"
-          placeholder="gespeicherte Orte"
-          @blur="onBlurPlaces">
-        </v-select>
-        <!-- <v-btn id="zoomtohomebtn" fab @click.stop="zoomToHome"> -->
-          <v-icon id="zoomtohomebtn" @click.stop="zoomToHome">mdi-home-map-marker</v-icon>
-        <!-- </v-btn> -->
+      <map-toolbar v-if="$route.path == '/'"></map-toolbar>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
@@ -75,64 +53,22 @@
 </template>
 
 <script>
-import OLProj from 'ol/proj';
-import VueGoogleAutocomplete from './components/AddressSearch/AddressSearch.vue';
+// import OLProj from 'ol/proj';
+// import VueGoogleAutocomplete from './components/AddressSearch/AddressSearch.vue';
+import MapToolbar from './components/MapToolbar/MapToolbar';
 
 export default {
   name: 'treemapper',
   data: () => ({
     drawer: null,
-    placesShow: false,
-    savedPlaces: window.treemapper.savedPlaces,
   }),
   props: {
     source: String,
   },
   components: {
-    VueGoogleAutocomplete,
+    MapToolbar,
   },
-  methods: {
-    getAddressData(addressData, placeResultData, id) {
-      window.treemapper.omap
-        .getView()
-        .setCenter(
-          OLProj.transform(
-            [addressData.longitude, addressData.latitude],
-            'EPSG:4326',
-            'EPSG:3857',
-          ),
-        );
-      window.treemapper.omap
-        .getView()
-        .setZoom(window.treemapper.mainSettings.addressZoom);
-      window.treemapper.ad = addressData;
-      window.treemapper.aid = id;
-    },
-    zoomToHome: () => {
-      window.treemapper.omap.getView().animate({
-        center: window.treemapper.mainSettings.homeCoords,
-        zoom: window.treemapper.mainSettings.addressZoom,
-        duration: 1000,
-      });
-    },
-    toggle() {
-      if (!this.placesShow) {
-        // this.focus();
-      }
-      this.placesShow = !this.placesShow;
-    },
-    onFocusPlaces() {
-      // eslint-disable-next-line no-console
-      console.log('focus');
-    },
-    /**
-     * When the input loses focus
-     */
-    onBlurPlaces() {
-      this.$emit('blur');
-      this.placesShow = false;
-    },
-  },
+  methods: {},
 };
 import('vuetify/dist/vuetify.css');
 import('mdi/css/materialdesignicons.min.css');
@@ -142,44 +78,6 @@ import('mdi/css/materialdesignicons.min.css');
 .list__tile--active .list__tile__action,
 .list__tile--active .list__tile__content {
   color: white;
-}
-.pac-container {
-  background: #212121;
-  color: white;
-}
-.pac-item:hover {
-  background: #404040;
-}
-.pac-item-query {
-  color: white;
-}
-.pac-item-selected {
-  background: #404040;
-  color: white;
-}
-.pac-matched {
-  color: white;
-}
-div#placesselect {
-  max-width: 0%;
-  margin-right: 1em;
-  transition: max-width 0.5s;
-}
-#placesselect.placesShow {
-  max-width: 100%;
-  transition: max-width 0.5s;
-}
-#placesselect i.input-group__append-icon {
-  display: none;
-}
-#placesselect.placesShow i.input-group__append-icon {
-  display: inherit;
-}
-#zoomtohomebtn {
-  color: rgba(255, 255, 255, 0.7);
-}
-#zoomtohomebtn:hover {
-  color: rgba(255, 255, 255, 1);
 }
 #christbam-logo {
   animation: roll 60s linear infinite;

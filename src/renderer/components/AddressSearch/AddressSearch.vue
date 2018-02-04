@@ -218,20 +218,27 @@ export default {
 </script>
 
 <style>
-div.addressSearch {
-  max-width: 0%;
-  transition: max-width 0.5s;
-  margin-right: 1em;
-}
-div.addressSearch.show {
-  max-width: 40%;
-  transition: max-width 0.5s;
-}
-
 div.addressSearch.show .input-group__icon-clearable {
   display: inherit;
 }
 div.addressSearch .input-group__icon-clearable {
   display: none;
+}
+.pac-container {
+  background: #212121;
+  color: white;
+}
+.pac-item:hover {
+  background: #404040;
+}
+.pac-item-query {
+  color: white;
+}
+.pac-item-selected {
+  background: #404040;
+  color: white;
+}
+.pac-matched {
+  color: white;
 }
 </style>

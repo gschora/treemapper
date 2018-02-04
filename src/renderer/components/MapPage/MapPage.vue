@@ -3,7 +3,7 @@
     <div id="mapdiv">
       <!-- <h1>MapPage</h1> -->
     </div>
-    <div >
+    <div>
       <address-tooltip
         :ttpLabelid='ttpLabelid'
         :ttpDivid='ttpDivid'
@@ -16,33 +16,26 @@
       <div style="display:none">
         <v-icon id="homeIcon" small color="blue">mdi-home-map-marker</v-icon>
       </div>
-      <!-- <v-container d-block>
-        <v-layout>-->
-          <!-- <v-flex>  -->
-
-          <!-- </v-flex> -->
-  <!--      </v-layout>
-      </v-container> -->
     </div>
-                <v-dialog v-model="saveLocDialog" max-width="40%">
-              <v-card >
-                <v-card-title primary-title>
-                  <h3>Name des Ortes</h3>
-                </v-card-title>
-                  <v-card-text>
-                  <v-text-field
-                    name="input-1"
-                    id="testing"
-                    :placeholder="addresslabeltext"
-                  >
-                  </v-text-field>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn color="primary" flat @click.stop="saveLocation">Speichern</v-btn>
-                  <v-btn color="primary" flat @click.stop="saveLocDialog=false">Abbrechen</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>    
+    <v-dialog v-model="saveLocDialog" max-width="40%">
+      <v-card >
+        <v-card-title primary-title>
+          <h3>Name des Ortes</h3>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+            name="input-1"
+            id="testing"
+            :placeholder="addresslabeltext"
+          >
+          </v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" flat @click.stop="saveLocation">Speichern</v-btn>
+          <v-btn color="primary" flat @click.stop="saveLocDialog=false">Abbrechen</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>    
   </div>
 </template>
 
