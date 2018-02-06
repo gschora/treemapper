@@ -51,9 +51,9 @@ function setupConfig() {
         // console.log(value);
       });
     } else {
-      // window.treemapper.savedPlaces = val;
-      // // eslint-disable-next-line no-console
-      // console.log(val);
+      val.forEach((el) => {
+        window.treemapper.savedPlaces.push(el);
+      });
     }
   });
 }
