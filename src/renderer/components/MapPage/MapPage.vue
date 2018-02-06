@@ -10,7 +10,7 @@
         :class='cssAddressTtp' 
         :labeltext='addresslabeltext'
         @btnClick1='saveHome'
-        @btnClick2='saveLocDialog = true'
+        @btnClick2='enableSaveLocDialog'
         >
       </address-tooltip>
       <div style="display:none">
@@ -24,9 +24,9 @@
         </v-card-title>
         <v-card-text>
           <v-text-field
-            name="input-1"
-            id="testing"
-            :placeholder="addresslabeltext"
+            name="savedPlacesInput"
+            id="savedPlacesInput"
+            v-model="addresslabeltext"
           >
           </v-text-field>
         </v-card-text>
@@ -41,7 +41,7 @@
       v-model="snackbar"
     >
       <label>{{snacktext}}</label>
-      <v-icon id="homeIcon" small color="white">{{snackicon}}</v-icon>
+      <v-icon medium color="white">{{snackicon}}</v-icon>
     </v-snackbar> 
   </div>
 </template>
@@ -63,7 +63,7 @@ export default {
       cssAddressTtp: ['tooltip-address'], // change class of tooltip - this will be added to default classes in component
       ttpLabelid: 'addressttptxt',
       ttpDivid: 'addressttpdiv',
-      addresslabeltext: 'parentlabel',
+      addresslabeltext: '',
       saveLocDialog: false,
       snacktext: 'test this',
       snackbar: false,
@@ -86,10 +86,23 @@ export default {
       this.snackcolor = 'success';
       this.snackbar = true;
     },
-    saveLocation: () => {
+    enableSaveLocDialog() {
+      this.saveLocDialog = true;
+      this.addresslabeltext = window.treemapper.currentRightClickPlace.text;
+    },
+    saveLocation() {
+      window.treemapper.currentRightClickPlace.text = this.addresslabeltext;
+      window.treemapper.savedPlaces.push(
+        window.treemapper.currentRightClickPlace,
+      );
+      this.snacktext = 'Ort gespeichert';
+      this.snackicon = 'done';
+      this.snackcolor = 'success';
+      this.snackbar = true;
+      this.saveLocDialog = false;
       // mp.getSaveLocationCoords();
       // eslint-disable-next-line no-console
-      console.log('save_location');
+      // console.log(this.addresslabeltext);
     },
   },
 };

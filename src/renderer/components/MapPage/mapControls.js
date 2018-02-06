@@ -544,29 +544,36 @@ const FeatureEditControl = function setupFeatEditCtrl(optOptions) {
 //   undefinedHTML: '&nbsp;',
 // });
 
-function reverseGeoCode(latlng) {
-  /* global google */
-  const geocoder = new google.maps.Geocoder();
+// function reverseGeoCode(latlng) {
+//   /* global google */
+//   const geocoder = new google.maps.Geocoder();
 
-  geocoder.geocode({ location: latlng }, (results, status) => {
-    if (status === 'OK') {
-      if (results.length > 0) {
-        window.treemapper.r = results[0];
-        const lbltxt = document.getElementById('addressttptxt');
-        lbltxt.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
-          6,
-        )} ${latlng.lng.toFixed(6)}`;
-        addressTooltip.setPosition(
-          OLProj.transform([latlng.lng, latlng.lat], 'EPSG:4326', 'EPSG:3857'),
-        );
-      } else {
-        // eslint-disable-next-line no-console
-        console.error('No location results found');
-      }
-    } else {
-      // window.treemapper.alert('Geocoder failed due to: ' + status);
-    }
-  });
+//   geocoder.geocode({ location: latlng }, (results, status) => {
+//     if (status === 'OK') {
+//       if (results.length > 0) {
+//         window.treemapper.r = results[0];
+//         // const lbltxt = document.getElementById('addressttptxt');
+//         // lbltxt.innerHTML = `${results[0].formatted_address}<br>${latlng.lat.toFixed(
+//         //   6,
+//         // )} ${latlng.lng.toFixed(6)}`;
+//         addressTooltip.setPosition(
+//           OLProj.transform([latlng.lng, latlng.lat], 'EPSG:4326', 'EPSG:3857'),
+//         );
+//       } else {
+//         // eslint-disable-next-line no-console
+//         console.error('No location results found');
+//       }
+//     } else {
+//       // window.treemapper.alert('Geocoder failed due to: ' + status);
+//     }
+//   });
+// }
+function setAddressTooltip() {
+  const adr = window.treemapper.currentRightClickPlace;
+
+  const lbltxt = document.getElementById('addressttptxt');
+  lbltxt.innerHTML = `${adr.streetName} ${adr.streetNr}, ${adr.postalCode} ${adr.city}`;
+  addressTooltip.setPosition(adr.latlng3857);
 }
 
 function getAddressObject(latlng3857) {
@@ -583,6 +590,7 @@ function getAddressObject(latlng3857) {
     streetName: '',
     country: '',
     postalCode: '',
+    city: '',
     latlng,
     latlng3857,
   };
@@ -591,6 +599,8 @@ function getAddressObject(latlng3857) {
     if (status === 'OK') {
       if (results.length > 0) {
         const rac = results[0].address_components;
+        // eslint-disable-next-line no-console
+        // console.log(results[0]);
         rac.forEach((item) => {
           item.types.forEach((ty) => {
             if (ty === 'street_number') {
@@ -601,6 +611,8 @@ function getAddressObject(latlng3857) {
               addressObject.country = item.long_name;
             } else if (ty === 'postal_code') {
               addressObject.postalCode = item.long_name;
+            } else if (ty === 'locality') {
+              addressObject.city = item.long_name;
             }
           });
         });
@@ -612,9 +624,12 @@ function getAddressObject(latlng3857) {
           addressObject.postalCode
         }`;
 
-        window.treemapper.savedPlaces.push(addressObject);
+        // window.treemapper.savedPlaces.push(addressObject);
+        window.treemapper.currentRightClickPlace = addressObject;
+
+        setAddressTooltip();
         // eslint-disable-next-line no-console
-        console.log(addressObject);
+        // console.log(addressObject);
       } else {
         // eslint-disable-next-line no-console
         console.error('No location results found');
@@ -631,9 +646,9 @@ function rightClick() {
     e.preventDefault();
 
     if (addressTooltip.getPosition() === undefined) {
-      const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
-      const latlng = { lat: coor[1], lng: coor[0] };
-      reverseGeoCode(latlng);
+      // const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
+      // const latlng = { lat: coor[1], lng: coor[0] };
+      // reverseGeoCode(latlng);
       getAddressObject(map.getEventCoordinate(e));
     } else {
       addressTooltip.setPosition(undefined);
