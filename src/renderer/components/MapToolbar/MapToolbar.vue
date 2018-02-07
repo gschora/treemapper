@@ -11,12 +11,13 @@
           id="placesselect"
           :class="placesShow ? 'placesShow':''"
           :items="savedPlaces"
+          item-value="value"
+          @input="selectPlaceItem"
           hide-details
           single-line
           dense
           prepend-icon="place"
           :prepend-icon-cb="toggle"
-          item-value="text"
           placeholder="gespeicherte Orte"
           @blur="onBlurPlaces">
         </v-select>
@@ -33,6 +34,7 @@ export default {
     drawer: null,
     placesShow: false,
     savedPlaces: window.treemapper.savedPlaces,
+    selectedPlacesItem: null,
   }),
   components: {
     VueGoogleAutocomplete,
@@ -74,6 +76,13 @@ export default {
     zoomToHome: () => {
       window.treemapper.omap.getView().animate({
         center: window.treemapper.mainSettings.homeCoords,
+        zoom: window.treemapper.mainSettings.addressZoom,
+        duration: 1000,
+      });
+    },
+    selectPlaceItem(item) {
+      window.treemapper.omap.getView().animate({
+        center: item,
         zoom: window.treemapper.mainSettings.addressZoom,
         duration: 1000,
       });
