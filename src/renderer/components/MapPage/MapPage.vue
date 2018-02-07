@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 97%;">
+  <div style="width: 100%; height: 95%;">
     <div id="mapdiv">
       <!-- <h1>MapPage</h1> -->
     </div>

@@ -14,8 +14,10 @@ import OLCollection from 'ol/collection';
 import ls from 'ol3-layerswitcher';
 
 const capabilitiesUrl = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml';
-const features = new OLCollection();
-const source = new OLSVector({ features });
+const featuresFields = new OLCollection();
+const sourceFields = new OLSVector({ featuresFields });
+const featuresPlaces = new OLCollection();
+const sourcePlaces = new OLSVector({ featuresPlaces });
 
 function setMainLayer(layerTitle, layergroup) {
   ls.forEachRecursive(layergroup, (la) => {
@@ -71,9 +73,29 @@ function setupLayers(baselayers, overlaylayers) {
     }),
   });
 
-  const vector = new OLLVector({
+  const vectorFields = new OLLVector({
     title: 'Felder',
-    source,
+    source: sourceFields,
+    style: new OLStyle({
+      fill: new OLFill({
+        color: 'rgba(255, 255, 255, 0.4)',
+      }),
+      stroke: new OLStroke({
+        color: '#FF8000',
+        width: 3,
+      }),
+      image: new OLCircle({
+        radius: 7,
+        fill: new OLFill({
+          color: '#FF8000',
+        }),
+      }),
+    }),
+  });
+
+  const vectorPlaces = new OLLVector({
+    title: 'Orte',
+    source: sourcePlaces,
     style: new OLStyle({
       fill: new OLFill({
         color: 'rgba(255, 255, 255, 0.4)',
@@ -133,7 +155,8 @@ function setupLayers(baselayers, overlaylayers) {
           title: 'basemap.at Grau',
           source: new OLSWmts(optionsgrau),
         });
-        overlaylayers.getLayers().push(vector);
+        overlaylayers.getLayers().push(vectorFields);
+        overlaylayers.getLayers().push(vectorPlaces);
         baselayers.getLayers().push(googleLayer);
         baselayers.getLayers().push(bingLayer);
         baselayers.getLayers().push(bmapOrthoLayer);
@@ -144,12 +167,13 @@ function setupLayers(baselayers, overlaylayers) {
       });
   } catch (error) {
     // if fetch capabilities is not working add at least other layers
-    overlaylayers.getLayers().push(vector);
+    overlaylayers.getLayers().push(vectorFields);
+    overlaylayers.getLayers().push(vectorPlaces);
     baselayers.getLayers().push(googleLayer);
     baselayers.getLayers().push(bingLayer);
     baselayers.getLayers().push(olsm);
   }
-  return vector;
+  return vectorFields;
 }
 
 export default {
