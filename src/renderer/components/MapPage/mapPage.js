@@ -20,20 +20,23 @@ const overlaylayers = new OLGroup({
 
 export default {
   initMap: () => {
-    let veclayer;
+    let vecLayers;
     let center;
 
     if (baselayers.getLayersArray().length === 0) {
-      veclayer = mpl.setupLayers(baselayers, overlaylayers);
+      vecLayers = mpl.setupLayers(baselayers, overlaylayers);
+      window.treemapper.fieldsLayer = vecLayers.fieldsLayer;
+      window.treemapper.placesLayer = vecLayers.savedPlacesLayer;
       center = window.treemapper.mainSettings.homeCoords;
     } else {
-      veclayer = window.treemapper.veclayer;
+      // veclayer = window.treemapper.veclayer;
       center = omap.getView().getCenter();
     }
 
-    veclayer.setZIndex(10);
+    window.treemapper.fieldsLayer.setZIndex(10);
+    window.treemapper.placesLayer.setZIndex(9);
 
-    omap = new OLMap({
+    window.treemapper.omap = new OLMap({
       layers: [overlaylayers, baselayers],
       target: 'mapdiv',
       controls: OLControl.defaults({
@@ -45,17 +48,17 @@ export default {
         projection: 'EPSG:3857',
       }),
     });
-    mpc.setupCtrls(omap, veclayer);
-    window.treemapper.omap = omap;
-    window.treemapper.veclayer = veclayer;
+    mpc.setupCtrls();
+    // window.treemapper.omap = omap;
+    // window.treemapper.veclayer = veclayer;
 
     // fix for distorted map on start
     setTimeout(() => {
-      omap.updateSize();
+      window.treemapper.omap.updateSize();
     }, 200);
 
     // sets zoom level to stay same when switching to settings page
-    omap.getView().on('change:resolution', (ev) => {
+    window.treemapper.omap.getView().on('change:resolution', (ev) => {
       const zl = Math.round(ev.target.getZoom());
       if (zl !== window.treemapper.mainSettings.currentZoom) {
         window.treemapper.mainSettings.currentZoom = zl;
@@ -63,8 +66,8 @@ export default {
     });
   },
   getAddressTooltipCoords() {
-    const ovc = omap.getOverlayById('addressTooltipOverlayId').getPosition();
-    omap.getOverlayById('addressTooltipOverlayId').setPosition(undefined); // disable tooltip
+    const ovc = window.treemapper.omap.getOverlayById('addressTooltipOverlayId').getPosition();
+    window.treemapper.omap.getOverlayById('addressTooltipOverlayId').setPosition(undefined); // disable tooltip
 
     window.treemapper.mainSettings.homeCoords = ovc;
     window.treemapper.lfdb.getItem('mainSettings').then((val) => {
