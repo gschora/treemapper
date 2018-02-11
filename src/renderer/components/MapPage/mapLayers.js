@@ -7,6 +7,7 @@ import OLFill from 'ol/style/fill';
 import OLStyle from 'ol/style/style';
 import OLStroke from 'ol/style/stroke';
 import OLCircle from 'ol/style/circle';
+// import OLIcon from 'ol/style/icon';
 import OLTile from 'ol/layer/tile';
 import OLOSM from 'ol/source/osm';
 import OLTileImage from 'ol/source/tileimage';
@@ -97,17 +98,14 @@ function setupLayers(baselayers, overlaylayers) {
     title: 'Orte',
     source: sourcePlaces,
     style: new OLStyle({
-      fill: new OLFill({
-        color: 'rgba(255, 255, 255, 0.4)',
-      }),
-      stroke: new OLStroke({
-        color: '#FF8000',
-        width: 3,
-      }),
       image: new OLCircle({
         radius: 7,
         fill: new OLFill({
-          color: '#FF8000',
+          color: 'rgba(33, 150, 243, 0.4)',
+        }),
+        stroke: new OLStroke({
+          color: '#2196f3',
+          width: 3,
         }),
       }),
     }),
@@ -173,7 +171,7 @@ function setupLayers(baselayers, overlaylayers) {
     baselayers.getLayers().push(bingLayer);
     baselayers.getLayers().push(olsm);
   }
-  return vectorFields;
+  return { fieldsLayer: vectorFields, savedPlacesLayer: vectorPlaces };
 }
 
 export default {
