@@ -14,6 +14,8 @@ import OLProj from 'ol/proj';
 import OLOverlay from 'ol/overlay';
 import OLPolygon from 'ol/geom/polygon';
 import OLLineString from 'ol/geom/linestring';
+import OLPoint from 'ol/geom/point';
+import OLFeature from 'ol/feature';
 import OLIDblClkZoom from 'ol/interaction/doubleclickzoom';
 import OLFormat from 'ol/format/geojson';
 // import OLCoordinate from 'ol/coordinate';
@@ -45,7 +47,7 @@ const wgs84Sphere = new OLSphere(6378137);
 let measureMode = 'none';
 let draw; // global so we can remove it later
 let source;
-let vector;
+// let vector;
 
 const select = new OLISelect({
   wrapX: false,
@@ -93,7 +95,7 @@ function formatArea(polygon) {
 function delFeature() {
   if (select.getFeatures().getLength() > 0) {
     select.getFeatures().forEach((f) => {
-      vector.getSource().removeFeature(f);
+      window.treemapper.fieldsLayer.getSource().removeFeature(f);
     });
     select.getFeatures().clear();
   }
@@ -625,8 +627,9 @@ function getAddressObject(latlng3857) {
         }`;
 
         // window.treemapper.savedPlaces.push(addressObject);
-        window.treemapper.currentRightClickPlace = addressObject;
+        // window.treemapper.currentRightClickPlace = addressObject;
 
+        drawLocationFeature(addressObject);
         setAddressTooltip();
         // eslint-disable-next-line no-console
         // console.log(addressObject);
@@ -645,23 +648,27 @@ function rightClick() {
     // contextmenu is right-click
     e.preventDefault();
 
-    if (addressTooltip.getPosition() === undefined) {
+    if (
+      addressTooltip.getPosition() === undefined &&
+      window.treemapper.currentRightClickPlace === null
+    ) {
       // const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
       // const latlng = { lat: coor[1], lng: coor[0] };
       // reverseGeoCode(latlng);
       getAddressObject(map.getEventCoordinate(e));
     } else {
       addressTooltip.setPosition(undefined);
+      removeLocationFeature();
     }
 
     window.treemapper.e = addressTooltip;
   });
 }
 
-function setupCtrls(olmap, vectorLayer) {
-  map = olmap;
-  vector = vectorLayer;
-  source = vectorLayer.getSource();
+function setupCtrls() {
+  map = window.treemapper.omap;
+  // vector = vecLayers.fieldsLayer;
+  source = window.treemapper.fieldsLayer.getSource();
   source.on('change', () => {
     enableBtnFeatureEdit(); // check if there is at least one feature to enable button
   });
@@ -676,17 +683,17 @@ function setupCtrls(olmap, vectorLayer) {
     tipLabel: 'Karten',
     className: 'mdi',
   });
-  olmap.addControl(layerSwitcher);
+  map.addControl(layerSwitcher);
 
   ol.inherits(MeasureLineControl, OLCControl);
   ol.inherits(MeasureAreaControl, OLCControl);
   ol.inherits(FeatureEditControl, OLCControl);
   ol.inherits(FeatureDeleteControl, OLCControl);
 
-  olmap.addControl(new MeasureLineControl());
-  olmap.addControl(new MeasureAreaControl());
-  olmap.addControl(new FeatureEditControl());
-  olmap.addControl(new FeatureDeleteControl());
+  map.addControl(new MeasureLineControl());
+  map.addControl(new MeasureAreaControl());
+  map.addControl(new FeatureEditControl());
+  map.addControl(new FeatureDeleteControl());
   enableBtnFeatureEdit();
   map.addInteraction(select);
 
@@ -701,4 +708,7 @@ export default {
   setupCtrls,
   createHomeOverlay,
   getAddressObject,
+  drawLocationFeature,
+  saveLocationFeaturesInDB,
+  getLocationFeaturesFromDB,
 };
