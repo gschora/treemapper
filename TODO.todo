@@ -5,12 +5,15 @@ treemapper:
     ✔ set home Position @critical @done (29.1.2018, 01:55:23)
     ☐ export/load file with features
     ☐ export and load db
-    ☐ add zoom-to-home button near search address field
+    ✔ add zoom-to-home button near search address field @done (10.2.2018, 23:07:39)
     ☐ add safed locations select field
+        ☐ create function for converting location feature in geojson
+        ☐ save geojson in db
+        ☐ on start load geojson from db and create saved places features on db
     ☐ add switch features button to switch through the features list
         or
     ☐ select field and zoom button
-    ☐ notification when home is set
+    ✔ notification when home is set @done (10.2.2018, 23:08:10)
 
 bugs:
     ✔ wrong position of home icon after program restart @critical @done (29.1.2018, 02:14:25)
