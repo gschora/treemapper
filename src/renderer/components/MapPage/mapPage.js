@@ -49,7 +49,7 @@ export default {
       }),
     });
     mpc.setupCtrls();
-    mpc.getLocationFeaturesFromDB();
+    // mpc.getLocationFeaturesFromDB();
     // window.treemapper.omap = omap;
     // window.treemapper.veclayer = veclayer;
 
@@ -92,6 +92,6 @@ export default {
     mpc.getAddressObject(ovc);
   },
   saveLocationInDB() {
-    mpc.saveLocationFeaturesInDB();
+    // mpc.saveLocationFeaturesInDB();
   },
 };

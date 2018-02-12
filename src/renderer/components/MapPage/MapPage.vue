@@ -92,6 +92,8 @@ export default {
     },
     saveLocation() {
       window.treemapper.currentRightClickPlace.text = this.addresslabeltext;
+      // eslint-disable-next-line no-console
+      delete window.treemapper.currentRightClickPlace.locationFeature;
       window.treemapper.savedPlaces.push(
         window.treemapper.currentRightClickPlace,
       );

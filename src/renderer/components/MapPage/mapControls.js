@@ -580,42 +580,18 @@ function setAddressTooltip() {
 
 function drawLocationFeature(addressobj) {
   const s = window.treemapper.placesLayer.getSource();
-  let f;
 
-  if (addressobj.locationFeature === undefined) {
-    f = new OLFeature({
-      geometry: new OLPoint(addressobj.latlng3857),
-    });
-    // addressobj.locationFeature = formatFeatureJSON.writeFeature(f);
-    addressobj.locationFeature = f;
-    window.treemapper.currentRightClickPlace = addressobj;
-    s.addFeature(f);
-  }
-  //  else if(typeof addressobj.locationFeature === 'string'){
-  //   f = new OLFeature({
-  //     geometry: new OLPoint(addressobj.latlng3857),
-  //   });
-  // }
-
-  // eslint-disable-next-line no-console
-  console.log(typeof f);
-
-  // const formatFeature = new OLFormat();
-  // // eslint-disable-next-line no-console
-  // console.log(formatFeature.writeFeature(f));
+  const f = new OLFeature({
+    geometry: new OLPoint(addressobj.latlng3857),
+  });
+  addressobj.locationFeature = f;
+  window.treemapper.currentRightClickPlace = addressobj;
+  s.addFeature(f);
 }
 
 function removeLocationFeature() {
   const s = window.treemapper.placesLayer.getSource();
-  // const feat = formatFeatureJSON.readFeature(
-  //   window.treemapper.currentRightClickPlace.locationFeature,
-  // );
-
-  // s.removeFeature(feat);
-  // // eslint-disable-next-line no-console
-  // console.log(window.treemapper.currentRightClickPlace.locationFeature);
   s.removeFeature(window.treemapper.currentRightClickPlace.locationFeature);
-  // s.refresh();
   window.treemapper.currentRightClickPlace = null;
 }
 
@@ -732,7 +708,9 @@ function rightClick() {
       getAddressObject(map.getEventCoordinate(e));
     } else {
       addressTooltip.setPosition(undefined);
-      removeLocationFeature();
+      if (window.treemapper.currentRightClickPlace.locationFeature !== undefined) {
+        removeLocationFeature();
+      }
     }
 
     window.treemapper.e = addressTooltip;
