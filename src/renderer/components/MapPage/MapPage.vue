@@ -95,12 +95,13 @@ export default {
       window.treemapper.savedPlaces.push(
         window.treemapper.currentRightClickPlace,
       );
-      window.treemapper.lfdb
-        .setItem('savedPlaces', window.treemapper.savedPlaces)
-        .catch((er) => {
-          // eslint-disable-next-line no-console
-          console.log(er);
-        });
+      mp.saveLocationInDB();
+      // window.treemapper.lfdb
+      //   .setItem('savedPlaces', window.treemapper.savedPlaces)
+      //   .catch((er) => {
+      //     // eslint-disable-next-line no-console
+      //     console.log(er);
+      //   });
       this.snacktext = 'Ort gespeichert';
       this.snackicon = 'done';
       this.snackcolor = 'success';

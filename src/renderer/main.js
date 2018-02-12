@@ -43,19 +43,6 @@ function setupConfig() {
         .setPosition(window.treemapper.mainSettings.homeCoords);
     }
   });
-
-  lfdb.getItem('savedPlaces').then((val) => {
-    if (val === null) {
-      lfdb.setItem('savedPlaces', window.treemapper.savedPlaces).then(() => {
-        // eslint-disable-next-line no-console
-        // console.log(value);
-      });
-    } else {
-      val.forEach((el) => {
-        window.treemapper.savedPlaces.push(el);
-      });
-    }
-  });
 }
 
 setupConfig();

@@ -48,6 +48,7 @@ let measureMode = 'none';
 let draw; // global so we can remove it later
 let source;
 // let vector;
+const formatFeatureJSON = new OLFormat();
 
 const select = new OLISelect({
   wrapX: false,
@@ -129,24 +130,21 @@ function createHomeOverlay() {
 }
 
 function autoSaveFeaturesInDb() {
-  const formatFeature = new OLFormat();
   const fs = [];
   source.getFeatures().forEach((feat) => {
-    fs.push(formatFeature.writeFeature(feat));
+    fs.push(formatFeatureJSON.writeFeature(feat));
   });
   window.treemapper.lfdb.setItem('drawnFeatures', fs).catch(() => {});
 }
 
 function getDrawnFeaturesFromDb() {
   if (window.treemapper.loadedFeatures === undefined) {
-    const formatFeature = new OLFormat();
-
     window.treemapper.lfdb.getItem('drawnFeatures').then((val) => {
       if (val !== null) {
         // disable eventlistener, otherwise the features added will added in db
         source.un('addfeature', autoSaveFeaturesInDb);
         val.forEach((item) => {
-          source.addFeature(formatFeature.readFeature(item));
+          source.addFeature(formatFeatureJSON.readFeature(item));
         });
         source.on('addfeature', autoSaveFeaturesInDb);
         window.treemapper.loadedFeatures = true;
@@ -574,8 +572,87 @@ function setAddressTooltip() {
   const adr = window.treemapper.currentRightClickPlace;
 
   const lbltxt = document.getElementById('addressttptxt');
-  lbltxt.innerHTML = `${adr.streetName} ${adr.streetNr}, ${adr.postalCode} ${adr.city}`;
+  lbltxt.innerHTML = `${adr.streetName} ${adr.streetNr}, ${adr.postalCode} ${
+    adr.city
+  }<br>${adr.latlng.lat.toFixed(5)} ${adr.latlng.lng.toFixed(5)}`;
   addressTooltip.setPosition(adr.latlng3857);
+}
+
+function drawLocationFeature(addressobj) {
+  const s = window.treemapper.placesLayer.getSource();
+  let f;
+
+  if (addressobj.locationFeature === undefined) {
+    f = new OLFeature({
+      geometry: new OLPoint(addressobj.latlng3857),
+    });
+    // addressobj.locationFeature = formatFeatureJSON.writeFeature(f);
+    addressobj.locationFeature = f;
+    window.treemapper.currentRightClickPlace = addressobj;
+    s.addFeature(f);
+  }
+  //  else if(typeof addressobj.locationFeature === 'string'){
+  //   f = new OLFeature({
+  //     geometry: new OLPoint(addressobj.latlng3857),
+  //   });
+  // }
+
+  // eslint-disable-next-line no-console
+  console.log(typeof f);
+
+  // const formatFeature = new OLFormat();
+  // // eslint-disable-next-line no-console
+  // console.log(formatFeature.writeFeature(f));
+}
+
+function removeLocationFeature() {
+  const s = window.treemapper.placesLayer.getSource();
+  // const feat = formatFeatureJSON.readFeature(
+  //   window.treemapper.currentRightClickPlace.locationFeature,
+  // );
+
+  // s.removeFeature(feat);
+  // // eslint-disable-next-line no-console
+  // console.log(window.treemapper.currentRightClickPlace.locationFeature);
+  s.removeFeature(window.treemapper.currentRightClickPlace.locationFeature);
+  // s.refresh();
+  window.treemapper.currentRightClickPlace = null;
+}
+
+function saveLocationFeaturesInDB() {
+  const fea = [];
+  window.treemapper.savedPlaces.forEach((adr) => {
+    // new obj is necessary, because otherwise the original will be changed, so no json feature
+    const addressObject = {
+      text: adr.text,
+      value: adr.latlng3857,
+      streetNr: adr.streetNr,
+      streetName: adr.streetNr,
+      country: adr.country,
+      postalCode: adr.postalCode,
+      city: adr.city,
+      latlng: adr.latlng,
+      latlng3857: adr.latlng3857,
+      locationFeature: formatFeatureJSON.writeFeature(adr.locationFeature),
+    };
+    fea.push(addressObject);
+  });
+  window.treemapper.lfdb.setItem('savedPlacesFeatures', fea).catch(() => {});
+}
+
+function getLocationFeaturesFromDB() {
+  window.treemapper.lfdb.getItem('savedPlacesFeatures').then((val) => {
+    if (val === null) {
+      // lfdb.setItem('savedPlaces', window.treemapper.savedPlaces).then(() => {
+      //   // eslint-disable-next-line no-console
+      //   // console.log(value);
+      // });
+    } else {
+      val.forEach((el) => {
+        window.treemapper.savedPlaces.push(el);
+      });
+    }
+  });
 }
 
 function getAddressObject(latlng3857) {
@@ -648,10 +725,7 @@ function rightClick() {
     // contextmenu is right-click
     e.preventDefault();
 
-    if (
-      addressTooltip.getPosition() === undefined &&
-      window.treemapper.currentRightClickPlace === null
-    ) {
+    if (addressTooltip.getPosition() === undefined) {
       // const coor = OLProj.transform(map.getEventCoordinate(e), 'EPSG:3857', 'EPSG:4326');
       // const latlng = { lat: coor[1], lng: coor[0] };
       // reverseGeoCode(latlng);

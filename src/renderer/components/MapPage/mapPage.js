@@ -49,6 +49,7 @@ export default {
       }),
     });
     mpc.setupCtrls();
+    mpc.getLocationFeaturesFromDB();
     // window.treemapper.omap = omap;
     // window.treemapper.veclayer = veclayer;
 
@@ -89,5 +90,8 @@ export default {
     omap.getOverlayById('addressTooltipOverlayId').setPosition(undefined); // disable tooltip
 
     mpc.getAddressObject(ovc);
+  },
+  saveLocationInDB() {
+    mpc.saveLocationFeaturesInDB();
   },
 };
