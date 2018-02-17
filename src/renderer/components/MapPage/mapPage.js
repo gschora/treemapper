@@ -30,7 +30,7 @@ export default {
       center = window.treemapper.mainSettings.homeCoords;
     } else {
       // veclayer = window.treemapper.veclayer;
-      center = omap.getView().getCenter();
+      center = window.treemapper.omap.getView().getCenter();
     }
 
     window.treemapper.fieldsLayer.setZIndex(10);
@@ -49,7 +49,7 @@ export default {
       }),
     });
     mpc.setupCtrls();
-    // mpc.getLocationFeaturesFromDB();
+    mpc.getLocationsFromDB();
     // window.treemapper.omap = omap;
     // window.treemapper.veclayer = veclayer;
 
@@ -92,6 +92,6 @@ export default {
     mpc.getAddressObject(ovc);
   },
   saveLocationInDB() {
-    // mpc.saveLocationFeaturesInDB();
+    mpc.saveLocationInDB();
   },
 };
