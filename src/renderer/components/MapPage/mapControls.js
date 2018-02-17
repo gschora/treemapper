@@ -595,40 +595,33 @@ function removeLocationFeature() {
   window.treemapper.currentRightClickPlace = null;
 }
 
-function saveLocationFeaturesInDB() {
+function saveLocationInDB() {
+  addressTooltip.setPosition(undefined);
   const fea = [];
   window.treemapper.savedPlaces.forEach((adr) => {
-    // new obj is necessary, because otherwise the original will be changed, so no json feature
-    const addressObject = {
-      text: adr.text,
-      value: adr.latlng3857,
-      streetNr: adr.streetNr,
-      streetName: adr.streetNr,
-      country: adr.country,
-      postalCode: adr.postalCode,
-      city: adr.city,
-      latlng: adr.latlng,
-      latlng3857: adr.latlng3857,
-      locationFeature: formatFeatureJSON.writeFeature(adr.locationFeature),
-    };
-    fea.push(addressObject);
+    // vorher das feature löschen, sonstfunktioniert speichern in db nicht
+    delete adr.locationFeature;
+    fea.push(adr);
   });
-  window.treemapper.lfdb.setItem('savedPlacesFeatures', fea).catch(() => {});
+  window.treemapper.lfdb.setItem('savedPlaces', fea).catch((err) => {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  });
 }
 
-function getLocationFeaturesFromDB() {
-  window.treemapper.lfdb.getItem('savedPlacesFeatures').then((val) => {
-    if (val === null) {
-      // lfdb.setItem('savedPlaces', window.treemapper.savedPlaces).then(() => {
-      //   // eslint-disable-next-line no-console
-      //   // console.log(value);
-      // });
-    } else {
-      val.forEach((el) => {
-        window.treemapper.savedPlaces.push(el);
-      });
-    }
-  });
+function getLocationsFromDB() {
+  if (window.treemapper.savedPlaces.length === 0) {
+    window.treemapper.lfdb.getItem('savedPlaces').then((val) => {
+      if (val !== null) {
+        // eslint-disable-next-line no-console
+        console.log(val);
+        val.forEach((addr) => {
+          window.treemapper.savedPlaces.push(addr);
+          drawLocationFeature(addr);
+        });
+      }
+    });
+  }
 }
 
 function getAddressObject(latlng3857) {
@@ -761,6 +754,6 @@ export default {
   createHomeOverlay,
   getAddressObject,
   drawLocationFeature,
-  saveLocationFeaturesInDB,
-  getLocationFeaturesFromDB,
+  saveLocationInDB,
+  getLocationsFromDB,
 };
