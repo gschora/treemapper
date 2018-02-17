@@ -613,8 +613,6 @@ function getLocationsFromDB() {
   if (window.treemapper.savedPlaces.length === 0) {
     window.treemapper.lfdb.getItem('savedPlaces').then((val) => {
       if (val !== null) {
-        // eslint-disable-next-line no-console
-        console.log(val);
         val.forEach((addr) => {
           window.treemapper.savedPlaces.push(addr);
           drawLocationFeature(addr);
