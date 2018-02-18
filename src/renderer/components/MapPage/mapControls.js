@@ -227,6 +227,20 @@ select.on(
       } else if (feat instanceof OLLineString) {
         output = formatLength(feat);
         infoCoord = feat.getLastCoordinate();
+      } else if (feat instanceof OLPoint) {
+        // eslint-disable-next-line no-console
+        select.getFeatures().forEach((f) => {
+          window.treemapper.savedPlaces.forEach((place) => {
+            if (place.locationFeature === f) {
+              infoCoord = place.latlng3857;
+              output = `${place.streetName} ${place.streetNr}, ${
+                place.postalCode
+              }</br>${place.latlng.lat.toFixed(5)}  ${place.latlng.lng.toFixed(5)}`;
+            }
+          });
+        });
+
+        // window.treemapper.placesLayer.getSource().removeFeature(feat);
       }
       measureInfoElement = document.createElement('div');
       measureInfoElement.id = 'mInfoEl';

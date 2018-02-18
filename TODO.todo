@@ -6,17 +6,19 @@ treemapper:
     ☐ export/load file with features
     ☐ export and load db
     ✔ add zoom-to-home button near search address field @done (10.2.2018, 23:07:39)
-    ☐ add safed locations select field
-        ☐ create function for converting location feature in geojson
-        ☐ save geojson in db
-        ☐ on start load geojson from db and create saved places features on db
+    ✔ add safed locations select field @done (18.2.2018, 11:47:30)
+        ✔ create function for converting location feature in geojson @done (18.2.2018, 11:46:52)
+        ✔ save geojson in db @done (18.2.2018, 11:46:57)
+        ✔ on start load geojson from db and create saved places features on db @done (18.2.2018, 11:47:03)
     ☐ add switch features button to switch through the features list
         or
     ☐ select field and zoom button
     ✔ notification when home is set @done (10.2.2018, 23:08:10)
+    ☐ button for creating points/addresses - remove right klick function
 
 bugs:
     ✔ wrong position of home icon after program restart @critical @done (29.1.2018, 02:14:25)
     ✔ when setting home position, overlays are added to map overlays and old ones not deleted check with window.omap.getOverlays().getArray().length @done (29.1.2018, 03:19:01)
     ✔ home overlay disapears after switching to settings page and back @done (29.1.2018, 03:18:57)
     ✔ home icon is in left bottom corner after switching to settings page @done (29.1.2018, 03:53:35)
+    ☐ saved location point has white border on selection - change to different color

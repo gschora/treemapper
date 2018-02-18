@@ -10,4 +10,5 @@
     "vue-html": "html",
     "vue": "html"
   }
+  // "editor.minimap.renderCharacters": false
 }
