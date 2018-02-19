@@ -81,6 +81,10 @@ export default {
       });
     },
     selectPlaceItem(item) {
+      this.$nextTick(() => {
+        // eslint-disable-next-line no-console
+        console.log(this.selected);
+      });
       window.treemapper.omap.getView().animate({
         center: item,
         zoom: window.treemapper.mainSettings.addressZoom,
