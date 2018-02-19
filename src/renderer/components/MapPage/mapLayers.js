@@ -12,7 +12,7 @@ import OLTile from 'ol/layer/tile';
 import OLOSM from 'ol/source/osm';
 import OLTileImage from 'ol/source/tileimage';
 import OLCollection from 'ol/collection';
-import ls from 'ol3-layerswitcher';
+import ls from 'ol-layerswitcher';
 
 const capabilitiesUrl = 'https://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml';
 const featuresFields = new OLCollection();

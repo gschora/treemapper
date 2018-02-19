@@ -1,5 +1,5 @@
-import OLLayerSwitcher from 'ol3-layerswitcher';
-import 'ol3-layerswitcher/src/ol3-layerswitcher.css';
+import OLLayerSwitcher from 'ol-layerswitcher';
+import 'ol-layerswitcher/src/ol-layerswitcher.css';
 import OLSphere from 'ol/sphere';
 import OLISelect from 'ol/interaction/select';
 import OLIModify from 'ol/interaction/modify';
