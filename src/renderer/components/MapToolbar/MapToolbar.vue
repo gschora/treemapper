@@ -13,6 +13,7 @@
           :items="savedPlaces"
           item-value="value"
           @input="selectPlaceItem"
+          v-model="selectedPlaceItem"
           hide-details
           single-line
           dense
@@ -34,7 +35,7 @@ export default {
     drawer: null,
     placesShow: false,
     savedPlaces: window.treemapper.savedPlaces,
-    selectedPlacesItem: null,
+    selectedPlaceItem: null,
   }),
   components: {
     VueGoogleAutocomplete,
@@ -81,14 +82,13 @@ export default {
       });
     },
     selectPlaceItem(item) {
-      this.$nextTick(() => {
-        // eslint-disable-next-line no-console
-        console.log(this.selected);
-      });
       window.treemapper.omap.getView().animate({
         center: item,
         zoom: window.treemapper.mainSettings.addressZoom,
         duration: 1000,
+      });
+      this.$nextTick(() => {
+        this.selectedPlaceItem = null;
       });
     },
   },
